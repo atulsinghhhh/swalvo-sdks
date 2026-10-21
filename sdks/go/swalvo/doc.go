@@ -10,7 +10,7 @@
 // browser gets the short-lived tokens this SDK mints.
 //
 //	client := swalvo.New(os.Getenv("SWALVO_API_KEY"),
-//		swalvo.WithBaseURL("https://api.swalvo.com"))
+//		swalvo.WithBaseURL("https://api.livqeno.com"))
 //
 //	room, err := client.Rooms.Create(ctx, swalvo.CreateRoomParams{Name: "standup", GetOrCreate: true})
 //	token, err := client.Tokens.Create(ctx, swalvo.CreateTokenParams{Room: room.ID, Identity: "user-42"})

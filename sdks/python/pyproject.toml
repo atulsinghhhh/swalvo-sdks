@@ -40,7 +40,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://swalvo.com"
+Homepage = "https://livqeno.com"
 Documentation = "https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/server/python.md"
 Repository = "https://github.com/atulsinghhhh/swalvo-sdks"
 Issues = "https://github.com/atulsinghhhh/swalvo-sdks/issues"

@@ -1,4 +1,4 @@
-# Swalvo Chat example
+# Livqeno Chat example
 
 A working chat client built on `@swalvo/chat` and `@swalvo/react`. Every message you
 see came out of Postgres and arrived over a real WebSocket — there is no mock
@@ -37,8 +37,8 @@ that expires, is scoped to one user, and can be revoked.
 
 ## Running it
 
-You need a Swalvo Cloud project and API key: sign up at the
-[dashboard](https://app.swalvo.com), create a project, then create
+You need a Livqeno Cloud project and API key: sign up at the
+[dashboard](https://app.livqeno.com), create a project, then create
 an API key from the project's API Keys tab.
 
 Then:
@@ -48,7 +48,7 @@ cd examples/chat
 npm install
 
 # Terminal 1 — the backend that holds the API key
-SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.swalvo.com npm run server
+SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.livqeno.com npm run server
 
 # Terminal 2 — the frontend
 npm run dev
@@ -63,14 +63,14 @@ other.
 | Variable | Default | What it does |
 | --- | --- | --- |
 | `SWALVO_API_KEY` | *(required)* | Project API key. Backend only. |
-| `SWALVO_API_URL` | `http://localhost:4100` | Swalvo Control API base URL. Set this to `https://api.swalvo.com` to use hosted Swalvo Cloud — the `localhost:4100` default only exists as a fallback for developers running Swalvo's own backend locally. |
+| `SWALVO_API_URL` | `http://localhost:4100` | Livqeno Control API base URL. Set this to `https://api.livqeno.com` to use hosted Livqeno Cloud — the `localhost:4100` default only exists as a fallback for developers running Livqeno's own backend locally. |
 | `SWALVO_CHAT_ROOM` | `example-chat` | Conversation name. Created on first run. |
 | `PORT` | `8788` | Port for this example's backend. |
 
 ## Things worth trying
 
 **Reconnection.** With both tabs open, briefly interrupt the backend's
-connectivity to Swalvo Cloud (e.g. toggle your network off and on, or stop
+connectivity to Livqeno Cloud (e.g. toggle your network off and on, or stop
 the `npm run server` process and restart it). Watch the connection badge go
 `reconnecting` → `connected`, and note that no messages are lost — the SDK
 refetches what it missed from history, because the WebSocket is never the
@@ -96,6 +96,6 @@ curl -X POST http://localhost:8788/api/chat/announce \
 It has no real authentication — `userId` comes straight from the request body so
 the example runs without an auth system. In a real app that identity must come
 from your own session (`req.user.id`), because whoever controls it controls who
-Swalvo attributes messages to. Same caveat as `examples/node-server`.
+Livqeno attributes messages to. Same caveat as `examples/node-server`.
 
 See [docs/chat/overview.md](../../docs/chat/overview.md) for the full API.

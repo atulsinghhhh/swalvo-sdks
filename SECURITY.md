@@ -14,7 +14,7 @@ We aim to acknowledge reports within a few business days.
 
 In scope: the SDKs and examples in this repository.
 
-Out of scope here: the hosted Swalvo platform (control plane, signaling,
+Out of scope here: the hosted Livqeno platform (control plane, signaling,
 media, dashboard). Report platform issues the same way and we will route them.
 
 ## Using the SDKs safely

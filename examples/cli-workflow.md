@@ -1,7 +1,7 @@
 # CLI workflow: zero to a joined room
 
 The canonical path through `@swalvo/cli` against hosted Swalvo Cloud
-(`https://api.swalvo.com`, dashboard at `https://app.swalvo.com`).
+(`https://api.livqeno.com`, dashboard at `https://app.livqeno.com`).
 Every command below is real — no placeholders elided for brevity beyond
 your own project name.
 
@@ -66,7 +66,7 @@ swalvo rooms list
 # 10. Mint a short-lived RTC token from YOUR OWN BACKEND using the API
 #     key from step 8 — never mint tokens in the browser, and the CLI
 #     itself never mints a permanent one either:
-curl -X POST https://api.swalvo.com/v1/rooms/a1b2c3d4-.../rtc-tokens \
+curl -X POST https://api.livqeno.com/v1/rooms/a1b2c3d4-.../rtc-tokens \
   -H "Authorization: Bearer rvk_xxxxxxxxxxxx.yyyy..." \
   -H "Content-Type: application/json" \
   -d '{"participantIdentity": "alice", "permissions": {"join": true, "subscribe": true, "publish": true, "publishAudio": true, "publishVideo": true}}'

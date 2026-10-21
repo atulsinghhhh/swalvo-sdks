@@ -1,10 +1,10 @@
 # @swalvo/rtc
 
-Swalvo's browser RTC SDK — join a room, publish camera and microphone,
+Livqeno's browser RTC SDK — join a room, publish camera and microphone,
 subscribe to remote media. Hides SDP, ICE, STUN, TURN and the media server
 behind a small typed API.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 ## Install
 
@@ -16,7 +16,7 @@ npm install @swalvo/rtc
 
 The token and endpoint come from your own backend — never mint them in a
 browser. See [`@swalvo/server`](https://www.npmjs.com/package/@swalvo/server)
-or [Swalvo's Python SDK](https://github.com/atulsinghhhh/swalvo-sdks/tree/main/sdks/python) for Python (not on PyPI yet — will
+or [Livqeno's Python SDK](https://github.com/atulsinghhhh/swalvo-sdks/tree/main/sdks/python) for Python (not on PyPI yet — will
 publish as `swalvo-sdk`).
 
 ```ts

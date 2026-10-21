@@ -61,8 +61,8 @@ class SwalvoClientTest {
         assertEquals("RAVEN_INVALID_CONFIG", e.getCode());
         assertTrue(e.getMessage().contains("baseUrl is required outside local development"));
 
-        Swalvo explicit = Swalvo.builder().apiKey("k").baseUrl("https://api.swalvo.com").build();
-        assertEquals("https://api.swalvo.com", explicit.baseUrl());
+        Swalvo explicit = Swalvo.builder().apiKey("k").baseUrl("https://api.livqeno.com").build();
+        assertEquals("https://api.livqeno.com", explicit.baseUrl());
     }
 
     @Test
@@ -84,8 +84,8 @@ class SwalvoClientTest {
 
     @Test
     void trimsTrailingSlashesFromBaseUrl() {
-        assertEquals("https://api.swalvo.com",
-                Swalvo.builder().apiKey("k").baseUrl("https://api.swalvo.com///").build().baseUrl());
+        assertEquals("https://api.livqeno.com",
+                Swalvo.builder().apiKey("k").baseUrl("https://api.livqeno.com///").build().baseUrl());
     }
 
     @Test

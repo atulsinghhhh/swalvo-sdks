@@ -146,16 +146,16 @@ final class ClientTest extends TestCase
     public function testAcceptsAnExplicitBaseUrlInProduction(): void
     {
         putenv('APP_ENV=production');
-        $client = new Client(apiKey: 'k', baseUrl: 'https://api.swalvo.com', transport: new StubTransport());
+        $client = new Client(apiKey: 'k', baseUrl: 'https://api.livqeno.com', transport: new StubTransport());
 
-        self::assertSame('Swalvo\\Client(https://api.swalvo.com)', (string) $client);
+        self::assertSame('Swalvo\\Client(https://api.livqeno.com)', (string) $client);
     }
 
     public function testRejectsANonHttpBaseUrl(): void
     {
         $this->expectException(SwalvoException::class);
         $this->expectExceptionMessage('absolute http(s) URL');
-        new Client(apiKey: 'k', baseUrl: 'api.swalvo.com');
+        new Client(apiKey: 'k', baseUrl: 'api.livqeno.com');
     }
 
     public function testRejectsANonPositiveTimeout(): void

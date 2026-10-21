@@ -4,7 +4,7 @@ React hooks and optional UI primitives for [`@swalvo/rtc`](https://www.npmjs.com
 and [`@swalvo/chat`](https://www.npmjs.com/package/@swalvo/chat).
 Headless by default — no UI lock-in.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 ## Install
 

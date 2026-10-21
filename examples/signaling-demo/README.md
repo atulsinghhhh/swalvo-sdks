@@ -9,13 +9,13 @@ Phase 4.
 
 ## Running it
 
-1. Sign up for a Swalvo Cloud project at the
-   [dashboard](https://app.swalvo.com) and create an API key from
+1. Sign up for a Livqeno Cloud project at the
+   [dashboard](https://app.livqeno.com) and create an API key from
    the project's API Keys tab.
 2. Get two RTC tokens for the same room:
 
    ```bash
-   curl -X POST https://api.swalvo.com/v1/rooms/<roomId>/rtc-tokens \
+   curl -X POST https://api.livqeno.com/v1/rooms/<roomId>/rtc-tokens \
      -H "Authorization: Bearer <your-api-key>" \
      -H "Content-Type: application/json" \
      -d '{"participantIdentity":"alice","permissions":{"join":true,"subscribe":true,"publish":true}}'

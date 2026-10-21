@@ -72,7 +72,7 @@ export class SwalvoHttpClient {
     if (!options.baseUrl && process.env.NODE_ENV === 'production') {
       throw new SwalvoError(
         'baseUrl is required outside local development. Pass your Swalvo API host, e.g. ' +
-          "baseUrl: 'https://api.swalvo.com' (or your self-hosted deployment's URL) — " +
+          "baseUrl: 'https://api.livqeno.com' (or your self-hosted deployment's URL) — " +
           `omitting it defaults to ${DEFAULT_BASE_URL}, which does not exist in production.`,
         { code: 'RAVEN_INVALID_CONFIG' },
       );

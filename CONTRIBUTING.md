@@ -1,8 +1,8 @@
 # Contributing
 
-Thanks for helping improve the Swalvo SDKs.
+Thanks for helping improve the Livqeno SDKs.
 
-This repository holds the public SDKs and examples. The Swalvo platform is
+This repository holds the public SDKs and examples. The Livqeno platform is
 proprietary and lives elsewhere, so changes to server behavior cannot be made
 here. If an SDK problem looks like a platform issue, say so in the report.
 

@@ -1,9 +1,9 @@
 # swalvo_live
 
-Swalvo Live Streaming for Flutter — join a stream as a host, co-host or
+Livqeno Live Streaming for Flutter — join a stream as a host, co-host or
 viewer, with the room and the live chat that come with it.
 
-Part of [Swalvo](https://swalvo.com), managed real-time communication infrastructure.
+Part of [Livqeno](https://livqeno.com), managed real-time communication infrastructure.
 
 Composes [`swalvo_rtc`](https://pub.dev/packages/swalvo_rtc) and
 [`swalvo_chat`](https://pub.dev/packages/swalvo_chat); it adds no media or

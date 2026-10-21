@@ -1,10 +1,10 @@
 # swalvo_rtc
 
-Swalvo's Flutter SDK — join a room, publish camera and microphone, render
+Livqeno's Flutter SDK — join a room, publish camera and microphone, render
 participants. Hides WebRTC, SDP, ICE, STUN, TURN and the media server
 behind a small typed API.
 
-Part of [Swalvo](https://swalvo.com), managed real-time communication infrastructure.
+Part of [Livqeno](https://livqeno.com), managed real-time communication infrastructure.
 
 ## Requirements
 

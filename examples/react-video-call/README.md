@@ -13,8 +13,8 @@ underlying SDK from the React/hooks side.
 
 ## Running it
 
-Sign up for a Swalvo Cloud project at the
-[dashboard](https://app.swalvo.com) and create an API key from the
+Sign up for a Livqeno Cloud project at the
+[dashboard](https://app.livqeno.com) and create an API key from the
 project's API Keys tab.
 
 ```bash
@@ -23,7 +23,7 @@ npm install   # installs @swalvo/rtc and @swalvo/react from npm
 npm run dev   # → http://localhost:8901
 ```
 
-Mint a real RTC token against `https://api.swalvo.com` (e.g.
+Mint a real RTC token against `https://api.livqeno.com` (e.g.
 `swalvo rooms create` + a direct `POST /v1/rooms/:roomId/rtc-tokens` with
 your API key as a bearer token), paste the full JSON response into the
 textarea, click **Continue**, pick your devices, then **Join**. Open a second tab with a different
@@ -32,7 +32,7 @@ textarea, click **Continue**, pick your devices, then **Join**. Open a second ta
 ## What this proves
 
 - `<SwalvoRoom>` plus one `<VideoConference>` is a complete call screen;
-  `import '@swalvo/react/video/styles.css'` gives it the Swalvo look.
+  `import '@swalvo/react/video/styles.css'` gives it the Livqeno look.
 - `<PreJoin onSubmit>` hands its choices (devices, camera/mic on or off)
   to `<VideoConference userChoices>`, which publishes accordingly once
   connected.

@@ -1,6 +1,6 @@
-# Swalvo RTC for Android
+# Livqeno RTC for Android
 
-Native Kotlin SDK for Swalvo video and audio calls. It speaks the
+Native Kotlin SDK for Livqeno video and audio calls. It speaks the
 same signaling protocol as the web, React Native and Flutter SDKs
 ([`docs/rtc/signaling.md`](../../docs/rtc/signaling.md)) and uses the same
 event names, so a call can mix all of them.

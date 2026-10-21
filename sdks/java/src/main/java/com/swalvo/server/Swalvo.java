@@ -23,7 +23,7 @@ import java.util.Locale;
  * <pre>{@code
  * Swalvo client = Swalvo.builder()
  *         .apiKey(System.getenv("SWALVO_API_KEY"))
- *         .baseUrl(System.getenv("SWALVO_API_URL")) // https://api.swalvo.com
+ *         .baseUrl(System.getenv("SWALVO_API_URL")) // https://api.livqeno.com
  *         .build();
  * IssuedToken token = client.tokens().create(
  *         CreateTokenParams.builder().room(roomId).identity("user-42").build());
@@ -188,7 +188,7 @@ public final class Swalvo {
             if (!hasBaseUrl && isProduction()) {
                 throw new SwalvoException(
                         "baseUrl is required outside local development. Pass your Swalvo API host, e.g. "
-                                + ".baseUrl(\"https://api.swalvo.com\") (or your self-hosted deployment's URL); "
+                                + ".baseUrl(\"https://api.livqeno.com\") (or your self-hosted deployment's URL); "
                                 + "omitting it defaults to " + HttpCore.DEFAULT_BASE_URL
                                 + ", which does not exist in production.",
                         "RAVEN_INVALID_CONFIG");

@@ -6,14 +6,14 @@ process — the browser only ever sees a short-lived RTC token.
 
 ## Running it
 
-Sign up for a Swalvo Cloud project at the
-[dashboard](https://app.swalvo.com) and create an API key from the
+Sign up for a Livqeno Cloud project at the
+[dashboard](https://app.livqeno.com) and create an API key from the
 project's API Keys tab (or `swalvo keys create` — see `docs/cli.md`).
 
 ```bash
 cd examples/node-server
 npm install     # installs @swalvo/server from npm
-SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.swalvo.com npm start
+SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.livqeno.com npm start
 # → Swalvo node-server example listening on http://localhost:8787
 ```
 

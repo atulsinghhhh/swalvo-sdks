@@ -15,11 +15,11 @@ describe('dashboardUrlFor', () => {
 
   it('maps a hosted api.<domain> to app.<domain>', () => {
     delete process.env.SWALVO_DASHBOARD_URL;
-    expect(dashboardUrlFor('https://api.swalvo.com')).toBe('https://app.swalvo.com');
+    expect(dashboardUrlFor('https://api.livqeno.com')).toBe('https://app.livqeno.com');
   });
 
   it('prefers SWALVO_DASHBOARD_URL when set', () => {
     process.env.SWALVO_DASHBOARD_URL = 'https://dash.example.com';
-    expect(dashboardUrlFor('https://api.swalvo.com')).toBe('https://dash.example.com');
+    expect(dashboardUrlFor('https://api.livqeno.com')).toBe('https://dash.example.com');
   });
 });

@@ -1,7 +1,7 @@
-# Swalvo Flutter SDK test app
+# Livqeno Flutter SDK test app
 
 An integration-test dashboard for the real `swalvo_rtc`, `swalvo_chat`, and
-`swalvo_live` Flutter SDKs against a real Swalvo backend. This is a test
+`swalvo_live` Flutter SDKs against a real Livqeno backend. This is a test
 harness, not a demo — every button exercises an actual SDK call, and
 anything the SDKs don't implement is labeled as a gap instead of faked.
 
@@ -11,7 +11,7 @@ proving the SDKs work, not for showing them off.
 
 ## Security model — read this first
 
-**This app never ships a Swalvo API key.** A key embedded in a distributed
+**This app never ships a Livqeno API key.** A key embedded in a distributed
 app binary is extractable — decompile the APK/IPA and it's right there.
 Production apps must mint tokens from their own backend using the secure
 token-grant flow (`@swalvo/server`/`swalvo` Python, same pattern as this
@@ -34,12 +34,12 @@ developer tool and typing a key in is convenient. What actually happens:
 If you'd rather not type a key into a mobile UI even under those
 conditions, set `SWALVO_API_KEY` (and `SWALVO_API_URL`) as environment
 variables before starting `server.mjs` instead — the Config screen's
-"Swalvo API key configured" status will already read `true` and you can
+"Livqeno API key configured" status will already read `true` and you can
 skip that field entirely.
 
 ## Running it
 
-There is no hosted Swalvo Cloud for this repo — `api.swalvo.com` appears in
+There is no hosted Livqeno Cloud for this repo — `api.livqeno.com` appears in
 `@swalvo/server`'s own docs purely as illustrative text ("or your
 self-hosted deployment's URL"). What you actually have is `apps/api`
 (NestJS), which you run yourself; its SDK default for local development is
@@ -65,9 +65,9 @@ flutter pub get
 flutter run --dart-define=SWALVO_BACKEND_URL=http://<your-lan-ip>:8792
 ```
 
-On the Config screen, leave "Swalvo API base URL" as
+On the Config screen, leave "Livqeno API base URL" as
 `http://localhost:4100` unless `apps/api` is running somewhere else (a
-different port, a deployed environment, etc.) — never a `swalvo.com`
+different port, a deployed environment, etc.) — never a `livqeno.com`
 domain, which isn't a real, reachable host for this project.
 
 **On a physical device, `localhost` means the device.** Use your machine's

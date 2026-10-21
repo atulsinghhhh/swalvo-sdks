@@ -1,6 +1,6 @@
-# Swalvo Go server SDK
+# Livqeno Go server SDK
 
-Swalvo's **backend** SDK for Go. Use it to mint short-lived RTC and chat tokens, manage
+Livqeno's **backend** SDK for Go. Use it to mint short-lived RTC and chat tokens, manage
 rooms, chat and live streams, read connection and error diagnostics, and verify
 webhook deliveries.
 
@@ -33,7 +33,7 @@ ctx := context.Background()
 
 client := swalvo.New(
 	os.Getenv("SWALVO_API_KEY"),                    // rvk_...; never hardcode it
-	swalvo.WithBaseURL(os.Getenv("SWALVO_API_URL")), // https://api.swalvo.com
+	swalvo.WithBaseURL(os.Getenv("SWALVO_API_URL")), // https://api.livqeno.com
 )
 
 room, err := client.Rooms.Create(ctx, swalvo.CreateRoomParams{Name: "standup", GetOrCreate: true})
@@ -247,7 +247,7 @@ diag, err := client.Diagnostics.Get(ctx)                         // signaling / 
 
 ## Webhooks
 
-Swalvo signs every webhook delivery:
+Livqeno signs every webhook delivery:
 
 ```
 swalvo-signature: t=<unix seconds>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>

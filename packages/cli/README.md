@@ -1,9 +1,9 @@
 # @swalvo/cli
 
-Swalvo from the terminal — manage projects, API keys, rooms and live
+Livqeno from the terminal — manage projects, API keys, rooms and live
 streams, and wire up a local app for RTC development.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 ## Install
 

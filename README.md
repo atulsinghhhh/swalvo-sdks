@@ -1,7 +1,7 @@
-# Swalvo SDKs
+# Livqeno SDKs
 
-Public client and server SDKs for **Swalvo**, a managed real-time platform for
-video, voice, chat and live streaming. Swalvo operates the control plane,
+Public client and server SDKs for **Livqeno**, a managed real-time platform for
+video, voice, chat and live streaming. Livqeno operates the control plane,
 signaling and media; these packages are how you integrate with it.
 
 - Platform: <https://livqeno.com>

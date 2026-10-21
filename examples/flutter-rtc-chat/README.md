@@ -1,12 +1,12 @@
-# Swalvo Flutter example — video call with chat
+# Livqeno Flutter example — video call with chat
 
-A real Swalvo call in Flutter: WebRTC media through Swalvo's SFU, messages
-through Swalvo Chat into Postgres. No mocks anywhere.
+A real Livqeno call in Flutter: WebRTC media through Livqeno's SFU, messages
+through Livqeno Chat into Postgres. No mocks anywhere.
 
 ## Running it
 
-You need a Swalvo Cloud project and API key: sign up at the
-[dashboard](https://app.swalvo.com), create a project, then create
+You need a Livqeno Cloud project and API key: sign up at the
+[dashboard](https://app.livqeno.com), create a project, then create
 an API key from the project's API Keys tab.
 
 ```bash
@@ -14,7 +14,7 @@ cd examples/flutter-rtc-chat
 
 # Terminal 1 — backend that holds SWALVO_API_KEY and mints both tokens
 npm install
-SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.swalvo.com npm run server
+SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.livqeno.com npm run server
 
 # Terminal 2
 flutter pub get
@@ -22,7 +22,7 @@ flutter run --dart-define=RAVEN_BACKEND_URL=http://<your-lan-ip>:8791
 ```
 
 `RAVEN_BACKEND_URL` above points the Flutter app at *this example's own*
-token-minting backend (on your LAN), not at Swalvo Cloud directly — the
+token-minting backend (on your LAN), not at Livqeno Cloud directly — the
 backend is the only thing that talks to `SWALVO_API_URL`.
 
 **On a real device, `localhost` means the phone.** Pass your machine's

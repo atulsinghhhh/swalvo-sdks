@@ -8,15 +8,15 @@ just this example's framework of choice.
 
 ## Running it
 
-Sign up for a Swalvo Cloud project at the
-[dashboard](https://app.swalvo.com) and create an API key from the
+Sign up for a Livqeno Cloud project at the
+[dashboard](https://app.livqeno.com) and create an API key from the
 project's API Keys tab (or with the CLI — see `docs/cli.md`).
 
 ```bash
 cd examples/python-server
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt   # installs swalvo from local source — not yet published to PyPI, see note below
-SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.swalvo.com uvicorn main:app --port 8787
+SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.livqeno.com uvicorn main:app --port 8787
 # → http://127.0.0.1:8787
 ```
 
@@ -53,7 +53,7 @@ full authorization model and security notes.
 
 ## Chat
 
-The same backend also mints Swalvo Chat tokens, because the security model
+The same backend also mints Livqeno Chat tokens, because the security model
 is identical: the API key stays here, and the browser gets a short-lived
 token scoped to one user.
 

@@ -3,7 +3,7 @@
     from swalvo import Swalvo, CreateTokenParams
     swalvo = Swalvo(
         api_key=os.environ["SWALVO_API_KEY"],
-        base_url=os.environ["SWALVO_API_URL"],  # https://api.swalvo.com
+        base_url=os.environ["SWALVO_API_URL"],  # https://api.livqeno.com
     )
     token = swalvo.tokens.create(CreateTokenParams(room=room_id, identity="user-42"))
 

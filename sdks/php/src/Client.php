@@ -25,7 +25,7 @@ use Swalvo\Resources\Tokens;
  * ```php
  * $client = new \Swalvo\Client(
  *     apiKey: getenv('SWALVO_API_KEY'),
- *     baseUrl: getenv('SWALVO_API_URL'), // https://api.swalvo.com
+ *     baseUrl: getenv('SWALVO_API_URL'), // https://api.livqeno.com
  * );
  * $grant = $client->tokens->create(['room' => $roomId, 'identity' => 'user-42']);
  * ```

@@ -4,7 +4,7 @@ A minimal static page proving real WebRTC media through `@swalvo/rtc` —
 actual camera/microphone, not a mock — plus a small FastAPI backend
 using `swalvo` to mint tokens and surface project diagnostics.
 
-This is built entirely on Swalvo's public SDKs: `app.js` never touches
+This is built entirely on Livqeno's public SDKs: `app.js` never touches
 SDP, ICE candidates, `RTCPeerConnection`, or any type specific to the
 media server underneath. `swalvo-rtc.js` is a vendored, self-contained
 ESM bundle (no build step, no CDN — see "Why an import map" below);
@@ -16,8 +16,8 @@ this exercises.
 
 ## Running it
 
-**1. Get a real API key.** Sign up for a Swalvo Cloud project at the
-[dashboard](https://app.swalvo.com) and create an API key from the
+**1. Get a real API key.** Sign up for a Livqeno Cloud project at the
+[dashboard](https://app.livqeno.com) and create an API key from the
 project's API Keys tab (or `swalvo keys create` — see `docs/cli.md`).
 
 **2. Start the backend** that mints tokens for this page:
@@ -26,7 +26,7 @@ project's API Keys tab (or `swalvo keys create` — see `docs/cli.md`).
 cd examples/media-demo
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt   # installs swalvo from local source — not yet published to PyPI, see note below
-SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.swalvo.com uvicorn server:app --port 8788
+SWALVO_API_KEY=rvk_xxxx.yyyy SWALVO_API_URL=https://api.livqeno.com uvicorn server:app --port 8788
 ```
 
 `swalvo` (Python) is **not yet published to PyPI** — `requirements.txt`

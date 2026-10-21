@@ -1,7 +1,7 @@
 # SwalvoRTC for iOS and macOS
 
-The native Swift client for Swalvo RTC: video and audio calls on iOS 15+
-and macOS 12+. It speaks Swalvo's signaling protocol
+The native Swift client for Livqeno RTC: video and audio calls on iOS 15+
+and macOS 12+. It speaks Livqeno's signaling protocol
 ([`docs/rtc/signaling.md`](../../docs/rtc/signaling.md)) directly, with one
 PeerConnection to the SFU, and uses the same vocabulary as the web SDK:
 `Room`, `LocalParticipant` / `RemoteParticipant`, `LocalTrack` /
@@ -206,7 +206,7 @@ callKit.onMute = { _, muted in
 try await callKit.reportIncomingCall(uuid: callId, handle: "Alice", hasVideo: true)
 ```
 
-Ringing is your app's business (a VoIP push from your backend): Swalvo has
+Ringing is your app's business (a VoIP push from your backend): Livqeno has
 no notion of an unanswered call. With PushKit you must report the call to
 CallKit inside the push handler or iOS terminates the app. When the room
 ends on its own, call `callKit.reportEnded(uuid:reason:)`.

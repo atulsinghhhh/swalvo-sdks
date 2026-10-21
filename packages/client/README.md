@@ -1,8 +1,8 @@
 # @swalvo/live
 
-Swalvo for the browser, with RTC and chat behind one object.
+Livqeno for the browser, with RTC and chat behind one object.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 This is a **facade, not a third implementation**: `swalvo.rtc` is a real
 `RTCClient` from [`@swalvo/rtc`](https://www.npmjs.com/package/@swalvo/rtc)

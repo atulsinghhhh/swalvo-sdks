@@ -1,4 +1,4 @@
-# Swalvo video-call example
+# Livqeno video-call example
 
 A minimal two-participant video call built entirely on `@swalvo/rtc`'s public
 API — `app.js` never touches SDP, ICE candidates, or `RTCPeerConnection`.
@@ -19,8 +19,8 @@ room.on('trackSubscribed', (track, participant) => {
 
 ## Running it
 
-1. Sign up for a Swalvo Cloud project at the
-   [dashboard](https://app.swalvo.com) and create an API key.
+1. Sign up for a Livqeno Cloud project at the
+   [dashboard](https://app.livqeno.com) and create an API key.
 2. Install `@swalvo/rtc` from npm and copy its bundle into this folder
    (this example loads it via a browser import map, not a bundler — see
    below for why):
@@ -36,7 +36,7 @@ room.on('trackSubscribed', (track, participant) => {
    python3 -m http.server 8900
    ```
 4. Mint two RTC tokens for the same room (different `participantIdentity`
-   values) against `https://api.swalvo.com` — via `curl` with your
+   values) against `https://api.livqeno.com` — via `curl` with your
    API key, or `swalvo rooms create` + `swalvo` CLI — see
    docs/sdk.md#authentication for the exact fields you need.
 5. Open `http://localhost:8900` in two browser tabs, paste one token's JSON

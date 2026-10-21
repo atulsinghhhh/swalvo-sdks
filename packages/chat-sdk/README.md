@@ -1,10 +1,10 @@
 # @swalvo/chat
 
-Swalvo's browser chat SDK — durable, ordered messaging with presence,
+Livqeno's browser chat SDK — durable, ordered messaging with presence,
 typing indicators, read receipts, reactions, threads and attachments.
 Connect, send and receive without writing a line of WebSocket code.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 ## Install
 

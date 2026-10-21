@@ -1,13 +1,13 @@
-# Swalvo React Native example — video call with chat
+# Livqeno React Native example — video call with chat
 
-A real Swalvo call on a phone: WebRTC media through Swalvo's SFU, messages
-through Swalvo Chat into Postgres. No mock participants, no fake message
+A real Livqeno call on a phone: WebRTC media through Livqeno's SFU, messages
+through Livqeno Chat into Postgres. No mock participants, no fake message
 array.
 
 ## Running it
 
-You need a Swalvo Cloud project and API key: sign up at the
-[dashboard](https://app.swalvo.com), create a project, then create
+You need a Livqeno Cloud project and API key: sign up at the
+[dashboard](https://app.livqeno.com), create a project, then create
 an API key from the project's API Keys tab.
 
 ```bash
@@ -16,7 +16,7 @@ npm install
 cd ios && pod install && cd ..     # iOS only
 
 # Terminal 1 — backend that holds SWALVO_API_KEY and mints both tokens
-SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.swalvo.com npm run server
+SWALVO_API_KEY=rvk_xxx.yyy SWALVO_API_URL=https://api.livqeno.com npm run server
 
 # Terminal 2
 npm run ios      # or: npm run android
@@ -24,8 +24,8 @@ npm run ios      # or: npm run android
 
 **On a real device, `localhost` means the phone.** Point `BACKEND_URL` in
 `src/App.tsx` at your machine's LAN IP so the device can reach this
-example's backend; the backend itself talks to Swalvo Cloud over the
-internet (`SWALVO_API_URL=https://api.swalvo.com`), so there is no
+example's backend; the backend itself talks to Livqeno Cloud over the
+internet (`SWALVO_API_URL=https://api.livqeno.com`), so there is no
 LAN-reachability requirement on that hop.
 
 ## What it demonstrates

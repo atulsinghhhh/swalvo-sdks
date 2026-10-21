@@ -17,7 +17,7 @@ import (
 // or a Client, to a browser: mint short-lived tokens here and send those.
 //
 //	client := swalvo.New(os.Getenv("SWALVO_API_KEY"),
-//		swalvo.WithBaseURL("https://api.swalvo.com"))
+//		swalvo.WithBaseURL("https://api.livqeno.com"))
 //	token, err := client.Tokens.Create(ctx, swalvo.CreateTokenParams{Room: roomID, Identity: "user-42"})
 //
 // A Client is safe for concurrent use. Its String, GoString and JSON forms
@@ -53,7 +53,7 @@ type config struct {
 	err        *Error
 }
 
-// WithBaseURL sets the Control API host, e.g. https://api.swalvo.com.
+// WithBaseURL sets the Control API host, e.g. https://api.livqeno.com.
 // Defaults to http://localhost:4100 (local dev). Required in production; see New.
 func WithBaseURL(baseURL string) Option {
 	return func(c *config) { c.baseURL = baseURL }
@@ -128,14 +128,14 @@ func New(apiKey string, opts ...Option) *Client {
 		h.configErr = newConfigError("apiKey is required; pass your Swalvo project API key, e.g. swalvo.New(os.Getenv(\"SWALVO_API_KEY\"))")
 	case base == "" && isProduction():
 		h.configErr = newConfigError("baseUrl is required outside local development. Pass your Swalvo API host, e.g. " +
-			"swalvo.WithBaseURL(\"https://api.swalvo.com\") (or your self-hosted deployment's URL); " +
+			"swalvo.WithBaseURL(\"https://api.livqeno.com\") (or your self-hosted deployment's URL); " +
 			"omitting it defaults to " + DefaultBaseURL + ", which does not exist in production.")
 	}
 	if base == "" {
 		base = DefaultBaseURL
 	}
 	if u, err := url.Parse(base); h.configErr == nil && (err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "") {
-		h.configErr = newConfigError("baseUrl must be an absolute http(s) URL, e.g. https://api.swalvo.com")
+		h.configErr = newConfigError("baseUrl must be an absolute http(s) URL, e.g. https://api.livqeno.com")
 	}
 	h.baseURL = base
 

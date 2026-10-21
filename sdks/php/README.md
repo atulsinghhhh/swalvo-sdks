@@ -1,6 +1,6 @@
 # swalvo/swalvo-php
 
-Swalvo's **PHP server SDK**. Use it to mint short-lived RTC, chat and live-stream credentials,
+Livqeno's **PHP server SDK**. Use it to mint short-lived RTC, chat and live-stream credentials,
 manage rooms, conversations and live streams, read connection and error diagnostics, and verify
 webhooks.
 
@@ -41,7 +41,7 @@ require 'vendor/autoload.php';
 
 $client = new \Swalvo\Client(
     apiKey: getenv('SWALVO_API_KEY'),
-    baseUrl: getenv('SWALVO_API_URL'), // https://api.swalvo.com
+    baseUrl: getenv('SWALVO_API_URL'), // https://api.livqeno.com
 );
 
 $room = $client->rooms->create(['name' => 'standup', 'getOrCreate' => true]);
@@ -63,7 +63,7 @@ Hand that JSON to your frontend, which passes it to `@swalvo/rtc`.
 ```php
 new \Swalvo\Client(
     apiKey: getenv('SWALVO_API_KEY'), // required
-    baseUrl: 'https://api.swalvo.com', // default http://localhost:4100 (local dev only)
+    baseUrl: 'https://api.livqeno.com', // default http://localhost:4100 (local dev only)
     timeout: 10.0,                      // seconds per attempt
     maxRetries: 2,                      // network errors and 429/502/503/504 only
     transport: null,                    // a Swalvo\Http\TransportInterface; defaults to ext-curl

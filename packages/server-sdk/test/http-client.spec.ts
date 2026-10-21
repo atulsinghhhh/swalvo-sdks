@@ -44,7 +44,7 @@ describe('SwalvoHttpClient', () => {
 
     it('does not throw in production when baseUrl is given explicitly', () => {
       process.env.NODE_ENV = 'production';
-      expect(() => new SwalvoHttpClient({ apiKey: 'k', baseUrl: 'https://api.swalvo.com' })).not.toThrow();
+      expect(() => new SwalvoHttpClient({ apiKey: 'k', baseUrl: 'https://api.livqeno.com' })).not.toThrow();
     });
 
     it('still defaults to localhost outside production, e.g. NODE_ENV unset or "development"', () => {

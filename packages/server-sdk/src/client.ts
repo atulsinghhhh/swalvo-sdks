@@ -20,7 +20,7 @@ import { TokensResource } from './resources/tokens';
  * import { Swalvo } from '@swalvo/server';
  * const swalvo = new Swalvo({
  *   apiKey: process.env.SWALVO_API_KEY!,
- *   baseUrl: process.env.SWALVO_API_URL!, // https://api.swalvo.com
+ *   baseUrl: process.env.SWALVO_API_URL!, // https://api.livqeno.com
  * });
  * const token = await swalvo.tokens.create({ room: roomId, identity: 'user-42' });
  * ```

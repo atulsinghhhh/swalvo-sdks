@@ -1,10 +1,10 @@
-# Swalvo Server SDK for Java
+# Livqeno Server SDK for Java
 
-Swalvo's **backend** SDK for the JVM. Use it to mint short-lived RTC and chat tokens, manage rooms
+Livqeno's **backend** SDK for the JVM. Use it to mint short-lived RTC and chat tokens, manage rooms
 and live streams (hosts, viewers, the stage, restreams, ingest and HLS playback), read connection
 and error diagnostics, and verify webhooks.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 It mirrors the [TypeScript server SDK](../../packages/server-sdk) resource for resource.
 
 > **Never ship this in a client.** It holds a permanent project API key. Browsers and apps get
@@ -38,7 +38,7 @@ import com.swalvo.server.model.*;
 
 Swalvo swalvo = Swalvo.builder()
         .apiKey(System.getenv("SWALVO_API_KEY"))
-        .baseUrl(System.getenv("SWALVO_API_URL"))   // https://api.swalvo.com
+        .baseUrl(System.getenv("SWALVO_API_URL"))   // https://api.livqeno.com
         .build();
 
 Room room = swalvo.rooms().create(CreateRoomParams.builder().name("standup").getOrCreate(true).build());
@@ -260,7 +260,7 @@ String eventType = request.getHeader(WebhookVerifier.SWALVO_EVENT_TYPE_HEADER); 
 ```
 
 There are also overloads that take an explicit `nowSeconds` and tolerance. `WebhookVerifier.sign(body, secret, t)`
-produces a header exactly the way Swalvo does, which helps when you test your endpoint.
+produces a header exactly the way Livqeno does, which helps when you test your endpoint.
 
 ## Errors
 

@@ -19,8 +19,8 @@ describe('chat endpoint resolution', () => {
       projectId: 'project_1',
       scopes: ['chat:read', 'chat:send'],
       conversations: ['conv_1'],
-      chatUrl: 'wss://api.swalvo.com/v1/chat/ws',
-      apiUrl: 'https://api.swalvo.com',
+      chatUrl: 'wss://api.livqeno.com/v1/chat/ws',
+      apiUrl: 'https://api.livqeno.com',
       expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
     };
 
@@ -28,16 +28,16 @@ describe('chat endpoint resolution', () => {
   });
 
   it('derives the WebSocket URL from apiUrl alone', () => {
-    const resolved = validateConfig({ token: fakeToken(), apiUrl: 'https://api.swalvo.com' });
+    const resolved = validateConfig({ token: fakeToken(), apiUrl: 'https://api.livqeno.com' });
 
-    expect(resolved.chatUrl).toBe('wss://api.swalvo.com/v1/chat/ws');
-    expect(resolved.apiUrl).toBe('https://api.swalvo.com');
+    expect(resolved.chatUrl).toBe('wss://api.livqeno.com/v1/chat/ws');
+    expect(resolved.apiUrl).toBe('https://api.livqeno.com');
   });
 
   it('derives the REST base from chatUrl alone, so history keeps working', () => {
-    const resolved = validateConfig({ token: fakeToken(), chatUrl: 'wss://api.swalvo.com/v1/chat/ws' });
+    const resolved = validateConfig({ token: fakeToken(), chatUrl: 'wss://api.livqeno.com/v1/chat/ws' });
 
-    expect(resolved.apiUrl).toBe('https://api.swalvo.com');
+    expect(resolved.apiUrl).toBe('https://api.livqeno.com');
   });
 
   it('maps http to ws for a local control plane, so the same code works unhosted', () => {
@@ -49,9 +49,9 @@ describe('chat endpoint resolution', () => {
   });
 
   it('tolerates a trailing slash on apiUrl rather than producing a double slash', () => {
-    const resolved = validateConfig({ token: fakeToken(), apiUrl: 'https://api.swalvo.com/' });
+    const resolved = validateConfig({ token: fakeToken(), apiUrl: 'https://api.livqeno.com/' });
 
-    expect(resolved.chatUrl).toBe('wss://api.swalvo.com/v1/chat/ws');
+    expect(resolved.chatUrl).toBe('wss://api.livqeno.com/v1/chat/ws');
   });
 
   it('rejects a token with no address alongside it, naming both fields that would fix it', () => {
@@ -78,7 +78,7 @@ describe('chat endpoint resolution', () => {
   });
 
   it('rejects a malformed token', () => {
-    expect(() => validateConfig({ token: 'not-a-jwt', apiUrl: 'https://api.swalvo.com' })).toThrow(
+    expect(() => validateConfig({ token: 'not-a-jwt', apiUrl: 'https://api.livqeno.com' })).toThrow(
       SwalvoChatAuthenticationError,
     );
   });

@@ -1,21 +1,21 @@
 # swalvo
 
-Swalvo's official **Python server SDK** — mint short-lived RTC and chat
+Livqeno's official **Python server SDK** — mint short-lived RTC and chat
 tokens, manage rooms and live streams, and read connection/error
 diagnostics from your own backend.
 
-Swalvo is a managed real-time infrastructure platform: video, voice, chat
+Livqeno is a managed real-time infrastructure platform: video, voice, chat
 and live streaming for your app, without running WebRTC or WebSocket
-servers yourself. Learn more: <https://swalvo.com>
+servers yourself. Learn more: <https://livqeno.com>
 
 > **Backend only.** This package holds a permanent project API key. It must
 > never be imported into browser, mobile or any other client-side code. The
-> browser talks to Swalvo with a short-lived token that *this* SDK mints.
+> browser talks to Livqeno with a short-lived token that *this* SDK mints.
 
 ## Requirements
 
 - Python **3.10+**
-- A Swalvo project API key
+- A Livqeno project API key
 
 ## Install
 
@@ -44,7 +44,7 @@ from swalvo import Swalvo, CreateTokenParams
 
 swalvo = Swalvo(
     api_key=os.environ["SWALVO_API_KEY"],
-    base_url=os.environ["SWALVO_API_URL"],  # https://api.swalvo.com
+    base_url=os.environ["SWALVO_API_URL"],  # https://api.livqeno.com
 )
 
 grant = swalvo.tokens.create(CreateTokenParams(room="room-1", identity="user-42"))
@@ -68,7 +68,7 @@ from swalvo import AsyncSwalvo, CreateTokenParams
 
 async with AsyncSwalvo(
     api_key=os.environ["SWALVO_API_KEY"],
-    base_url=os.environ["SWALVO_API_URL"],  # https://api.swalvo.com
+    base_url=os.environ["SWALVO_API_URL"],  # https://api.livqeno.com
 ) as swalvo:
     grant = await swalvo.tokens.create(CreateTokenParams(room="room-1", identity="user-42"))
 ```

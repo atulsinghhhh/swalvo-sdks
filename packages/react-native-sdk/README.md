@@ -1,10 +1,10 @@
 # @swalvo/react-native
 
-Swalvo for React Native — real-time video, voice and messaging on iOS and
+Livqeno for React Native — real-time video, voice and messaging on iOS and
 Android, with the same API as [`@swalvo/live`](https://www.npmjs.com/package/@swalvo/live),
 the browser SDK you use in Next.js and other web apps.
 
-Part of [Swalvo](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
+Part of [Livqeno](https://github.com/atulsinghhhh/swalvo-sdks), open-source real-time communication infrastructure.
 
 Reuses [`@swalvo/rtc`](https://www.npmjs.com/package/@swalvo/rtc)
 unmodified: the protocol, reconnection and track handling are the same

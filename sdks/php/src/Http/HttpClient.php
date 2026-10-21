@@ -62,7 +62,7 @@ final class HttpClient implements \JsonSerializable
         if (($baseUrl === null || $baseUrl === '') && self::isProductionEnvironment()) {
             throw new SwalvoException(
                 'baseUrl is required outside local development. Pass your Swalvo API host, e.g. ' .
-                "baseUrl: 'https://api.swalvo.com' (or your self-hosted deployment's URL) — " .
+                "baseUrl: 'https://api.livqeno.com' (or your self-hosted deployment's URL) — " .
                 'omitting it defaults to ' . self::DEFAULT_BASE_URL . ', which does not exist in production.',
                 'RAVEN_INVALID_CONFIG',
             );
@@ -72,7 +72,7 @@ final class HttpClient implements \JsonSerializable
         $scheme = strtolower((string) parse_url($baseUrl, PHP_URL_SCHEME));
         if ($scheme !== 'http' && $scheme !== 'https') {
             throw new SwalvoException(
-                'baseUrl must be an absolute http(s) URL, e.g. https://api.swalvo.com',
+                'baseUrl must be an absolute http(s) URL, e.g. https://api.livqeno.com',
                 'RAVEN_INVALID_CONFIG',
             );
         }

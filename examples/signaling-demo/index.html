@@ -93,14 +93,14 @@
     <p class="hint">
       A minimal manual test page for the WebSocket signaling layer — no media, no build step. Open this same file in two
       browser tabs to act as two participants in the same room. Get RTC tokens via
-      <code>POST /v1/rooms/:roomId/rtc-tokens</code> against <code>https://api.swalvo.com</code> with your project API
+      <code>POST /v1/rooms/:roomId/rtc-tokens</code> against <code>https://api.livqeno.com</code> with your project API
       key (see <code>docs/sdk.md#authentication</code>).
     </p>
 
     <fieldset>
       <legend>Connection</legend>
       <label>Signaling URL</label>
-      <input id="wsUrl" value="wss://api.swalvo.com/v1/rtc" />
+      <input id="wsUrl" value="wss://api.livqeno.com/v1/rtc" />
       <p class="hint">
         Hosted Swalvo Cloud default shown. If your token response's <code>endpoint</code> field differs, paste that
         value here instead — it's the authoritative signaling URL for your project/region.
