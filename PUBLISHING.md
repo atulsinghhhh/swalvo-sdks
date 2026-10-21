@@ -44,11 +44,4 @@ npm view @swalvo/rtc dist-tags.latest
 npx @swalvo/cli --help
 ```
 
-Flutter (`swalvo_rtc`/`swalvo_chat`/`swalvo_live`) is not yet on pub.dev
-under these names; the pre-rename `raven_*` packages are the live ones (see
-`docs/releases.md`). A `workflow_dispatch`-gated CI workflow
-(`.github/workflows/flutter-release.yml`) can publish a chosen package, and
-pushes to `main` that bump a package's `pubspec.yaml` version publish it
-automatically. Python (`swalvo`) is not yet on PyPI either (only the old
-`livqeno-sdk` 0.1.0 is); see `docs/releases.md` and
-`docs/sdk-publication-audit.md`.
+See [docs/releases.md](./docs/releases.md) for the full release steps for npm, PyPI and pub.dev.

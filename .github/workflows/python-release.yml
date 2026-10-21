@@ -18,18 +18,18 @@ name: Release Python SDK
 # same gates on the exact ref being released.
 #
 # Uses PyPI Trusted Publishing (OIDC) — the same no-long-lived-token
-# approach docs/releases.md documents for the @swalvo/* npm packages
+# approach docs/releases.md in this repo documents for the @swalvo/* npm packages
 # and flutter-release.yml uses for pub.dev. One-time setup on pypi.org,
 # once the package exists there (or via a *pending* publisher beforehand,
 # see docs/releases.md):
 #   pypi.org -> project -> Publishing -> Add a new publisher
 #     Owner:      atulsinghhhh
-#     Repository: Raven
+#     Repository: swalvo-sdks
 #     Workflow:   python-release.yml
 #     Environment: pypi
 #
 # NOTE: the distribution was renamed from `livqeno-sdk` (taken on PyPI by
-# an unrelated project — see docs/sdk-publication-audit.md) to `swalvo`.
+# an unrelated project) to `swalvo`.
 # Configure the trusted publisher above for the `swalvo` project name
 # before the first release; the wheel ships the `swalvo` import package
 # plus the deprecated `raven` shim.
