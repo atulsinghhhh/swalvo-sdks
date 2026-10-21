@@ -61,7 +61,9 @@ class FakeChatSocket extends StreamChannelMixin<dynamic>
   @override
   Future<void> get ready {
     readyAccessed = true;
-    return readyError == null ? Future<void>.value() : Future<void>.error(readyError!);
+    return readyError == null
+        ? Future<void>.value()
+        : Future<void>.error(readyError!);
   }
 
   /// Delivers the server's hello, which is what makes `connect()` resolve.

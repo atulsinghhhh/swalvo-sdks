@@ -9,6 +9,12 @@ repository: https://github.com/atulsinghhhh/swalvo-sdks
 issue_tracker: https://github.com/atulsinghhhh/swalvo-sdks/issues
 documentation: https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/flutter.md
 
+topics:
+  - webrtc
+  - video-call
+  - video
+  - realtime
+
 environment:
   sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.27.0"

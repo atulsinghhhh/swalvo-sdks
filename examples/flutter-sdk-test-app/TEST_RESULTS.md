@@ -256,7 +256,7 @@ it.
 the three (3.2c) then independently reproduced live on a real Android
 device (see below) before a code-level cause was known.
 
-**(a) `dispose()`/`disconnect()` while `connect()` awaits the server's
+**(a) `dispose()`/`disconnect()` whiley `connect()` awaits the server's
 hello can hang that `connect()` forever.** `_teardownSocket()` cancels the
 socket subscription *before* closing it, on purpose, so the close doesn't
 drive a reconnect — but that also skips the only other code
