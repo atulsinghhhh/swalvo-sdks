@@ -22,9 +22,28 @@ contains only the SDKs and examples.
 | `@swalvo/server` | `packages/server-sdk` | Server-side token, room and diagnostics SDK |
 | `@swalvo/cli` | `packages/cli` | The `swalvo` command line tool |
 
-Other languages live under `sdks/`: Python (`swalvo`), Flutter
-(`swalvo_rtc`, `swalvo_chat`, `swalvo_live`), Go, Java, PHP, iOS, Android.
+## Available SDKs
+
+| Platform | Package | Path |
+|---|---|---|
+| JavaScript / TypeScript | the `@swalvo/*` packages above | `packages/` |
+| Python (server) | `swalvo` | `sdks/python` |
+| Flutter | `swalvo_rtc`, `swalvo_chat`, `swalvo_live` | `sdks/flutter` |
+
 Runnable samples are in `examples/`.
+
+## Coming soon
+
+These SDKs are planned and are not part of this repository yet:
+
+- Go
+- Java
+- PHP
+- iOS (Swift)
+- Android (Kotlin)
+
+Until they ship, any language can use the platform's HTTP API directly. See
+the docs at <https://docs.livqeno.com>.
 
 ## How it fits together
 

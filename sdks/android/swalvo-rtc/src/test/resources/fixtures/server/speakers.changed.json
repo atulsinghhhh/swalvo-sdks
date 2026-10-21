@@ -1,9 +1,0 @@
-{
-  "type": "speakers.changed",
-  "speakers": [
-    {
-      "participantId": "alice",
-      "level": 0.82
-    }
-  ]
-}

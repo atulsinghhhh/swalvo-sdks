@@ -1,8 +1,0 @@
-{
-  "type": "room.joined",
-  "roomId": "room_123",
-  "participants": [],
-  "region": "ap-south",
-  "clientRegion": "ap-south",
-  "e2ee": true
-}

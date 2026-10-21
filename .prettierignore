@@ -62,8 +62,6 @@ scripts/capacity/.content/
 # Byte-for-byte fixtures shared across SDKs: the iOS/Android copies are
 # compared with the docs/ originals, so none of them may be reformatted.
 docs/architecture/*-vectors.json
-sdks/android/swalvo-rtc/src/test/resources/
-sdks/ios/Tests/SwalvoRTCTests/Fixtures/
 
 # Build output: SDK bundles vendored into the no-bundler examples, and
 # dashboards exported from Grafana as-is.
@@ -71,6 +69,3 @@ examples/**/swalvo-*.js
 infrastructure/observability/grafana/dashboards/
 
 # Native toolchain output that only exists on a developer's machine.
-sdks/ios/.build/
-sdks/ios/.build-catalyst/
-sdks/php/vendor/

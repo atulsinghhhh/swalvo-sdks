@@ -1,7 +1,0 @@
-{
-  "type": "room.joined",
-  "roomId": "room_123",
-  "participants": [],
-  "resumeToken": "rt_2",
-  "resumed": true
-}

@@ -1,8 +1,0 @@
-{
-  "type": "participant.updated",
-  "participantId": "bob",
-  "metadata": "{\"role\":\"host\"}",
-  "attributes": {
-    "hand": "raised"
-  }
-}

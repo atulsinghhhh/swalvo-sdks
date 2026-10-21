@@ -1,7 +1,0 @@
-{
-  "type": "subscription.state",
-  "publisherId": "bob",
-  "trackId": "bob-cam",
-  "state": "active",
-  "layer": "medium"
-}

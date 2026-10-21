@@ -1,5 +1,0 @@
-{
-  "type": "room.join",
-  "roomId": "room_123",
-  "autoSubscribe": false
-}

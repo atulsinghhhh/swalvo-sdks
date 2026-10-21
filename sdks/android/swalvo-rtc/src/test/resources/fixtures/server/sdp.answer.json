@@ -1,4 +1,0 @@
-{
-  "type": "sdp.answer",
-  "sdp": "v=0\r\na=setup:passive\r\n"
-}

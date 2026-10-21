@@ -15,7 +15,7 @@ pnpm install
 pnpm build && pnpm typecheck && pnpm test
 ```
 
-Python, Go, Flutter, Java, PHP, iOS and Android SDKs each have their own
+The Python and Flutter SDKs each have their own
 toolchain; see the README in `sdks/<language>/`.
 
 ## Pull requests

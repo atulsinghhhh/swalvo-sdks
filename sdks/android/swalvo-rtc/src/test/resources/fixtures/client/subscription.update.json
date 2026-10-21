@@ -1,6 +1,0 @@
-{
-  "type": "subscription.update",
-  "publisherId": "bob",
-  "trackId": "bob-cam",
-  "layer": "low"
-}

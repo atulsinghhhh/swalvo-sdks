@@ -25,13 +25,18 @@ jobs:
       - run: pnpm test
       - run: node scripts/verify-package-metadata.mjs
       - run: node scripts/verify-pack-manifests.mjs
-  go:
-    name: Go SDK
+  python:
+    name: Python SDK
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdks/python
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-python@v6
         with:
-          go-version-file: sdks/go/go.mod
-      - run: go test ./...
-        working-directory: sdks/go
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: mypy src
+      - run: pytest -q

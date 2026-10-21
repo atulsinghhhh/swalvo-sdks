@@ -1,7 +1,0 @@
-{
-  "type": "participant.joined",
-  "participant": {
-    "id": "carol",
-    "tracks": []
-  }
-}
