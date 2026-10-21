@@ -1,0 +1,5 @@
+{
+  "type": "room.join",
+  "roomId": "room_123",
+  "region": "asia-south"
+}

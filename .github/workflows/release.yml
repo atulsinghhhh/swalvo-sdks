@@ -1,0 +1,212 @@
+name: Release
+
+# Changesets-driven release for the eight public @swalvo/* packages.
+#
+#   PR carrying a changeset
+#      ↓ merged to main
+#   this workflow opens/updates a "Version Packages" PR
+#      ↓ you review and merge that PR
+#   this workflow runs again, finds no changesets pending, and publishes
+#      ↓
+#   npm  →  git tags  →  GitHub Releases
+#
+# Nothing publishes on a normal merge. The version PR is the approval gate,
+# and it is a human action.
+#
+
+# Paused until the first deploy: this workflow only runs when started by
+# hand (Actions > Release > Run workflow). To turn automatic runs back on,
+# restore the push/pull_request triggers from git history (commit "ci: pause
+# deploy and publish workflows").
+on:
+  workflow_dispatch:
+
+concurrency:
+  # Never cancel a release mid-publish: a half-published set of
+  # interdependent packages is far worse than a queued run.
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  release:
+    name: Version or publish
+    runs-on: ubuntu-latest
+    # Skip the version PR's own merge commit only if it carried nothing —
+    # changesets/action decides that itself, so no ref filtering here.
+    permissions:
+      # Push version-bump commits, create tags, create GitHub Releases.
+      contents: write
+      # Open and update the "Version Packages" PR.
+      pull-requests: write
+      # Load-bearing for publishing. pnpm mints the npm credential from this
+      # job's OIDC identity — without it there is no credential at all, and
+      # the publish step cannot authenticate. See the note below.
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # changesets needs history to work out what changed since the last
+          # release and to write changelog links.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          # Pins the registry that pnpm resolves the publish target against.
+          # It no longer supplies credentials: the `.npmrc` this writes has an
+          # empty `_authToken` now that NODE_AUTH_TOKEN is gone, and pnpm
+          # overwrites that with the OIDC-minted token anyway.
+          registry-url: "https://registry.npmjs.org"
+
+      - run: pnpm install --frozen-lockfile
+
+      # Publishing is the last step of a four-minute job, so a credential
+      # that cannot be minted is discovered four minutes late. This costs no
+      # network at all and moves that discovery to the front.
+      #
+      # There is no token to validate any more. The only local precondition
+      # for trusted publishing is that `id-token: write` actually took
+      # effect — GitHub injects these two variables only when it did. If a
+      # future edit drops the permission, or an org policy strips it, this
+      # fails here with a readable message instead of surfacing four minutes
+      # later as an opaque "Skipped OIDC" warning followed by a 404.
+      - name: Preflight — can this job mint an npm credential?
+        run: |
+          set -euo pipefail
+
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ] || [ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; then
+            echo "::error::No OIDC token available to this job. Publishing needs 'id-token: write' in the job's permissions block; see docs/releases.md."
+            exit 1
+          fi
+          echo "OIDC token endpoint present — pnpm can request an id-token."
+
+      # Publishing a broken tarball cannot be undone — npm unpublish is
+      # heavily restricted. So the same gates that guard main run again
+      # here, on the exact tree about to be packed.
+      - name: Typecheck
+        run: |
+          pnpm --filter "./packages/*" run build
+          pnpm -r --if-present run typecheck
+
+      - name: Unit tests
+        run: pnpm -r --if-present run test
+
+      # Fails the release if any package about to be published is missing a
+      # README, a LICENSE, repository metadata or publishConfig.access, or
+      # if a private package has somehow become publishable.
+      - name: Verify package metadata
+        run: node scripts/verify-package-metadata.mjs
+
+      # Every publishable package is packed with the real packer and the
+      # manifest inside the tarball inspected, without contacting the
+      # registry.
+      #
+      # This step used to run `npm publish --dry-run`, which lists the files
+      # in the tarball but never validates dependency ranges — so it passed
+      # happily on @swalvo/rtc@0.1.0, whose published manifest still read
+      # a `"workspace:*"` sibling dependency and failed for every installer
+      # on earth with EUNSUPPORTEDPROTOCOL.
+      - name: Verify packed manifests are installable
+        run: node scripts/verify-pack-manifests.mjs
+
+      - name: Changesets — version PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # Builds every package, then publishes only those whose version is
+          # not already on the registry, in dependency order.
+          publish: pnpm release
+          version: pnpm version-packages
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+          # One GitHub Release per published package, tagged
+          # <package>@<version>, with that package's changelog entry as the
+          # body. Written by changesets from the real changeset files — no
+          # release is ever invented.
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # ---------------------------------------------------------------
+          # Authentication — npm trusted publishing (OIDC). No token.
+          #
+          # pnpm requests an OIDC id-token from GitHub for the audience
+          # `npm:registry.npmjs.org`, POSTs it to
+          # `/-/npm/v1/oidc/token/exchange/package/<name>`, and publishes
+          # with the short-lived credential npm returns. This is per package
+          # and requires each package on npmjs.com to name this repository
+          # and this workflow file as its trusted publisher.
+          #
+          # There is deliberately no NPM_TOKEN here. It is not a fallback
+          # that was left out — a token present in the environment is worse
+          # than none: pnpm would still prefer the OIDC credential
+          # (`publishOptions.token` is overwritten when the exchange
+          # succeeds), so the token would sit unused until the day OIDC
+          # silently failed, at which point it would quietly take over and
+          # hide the breakage.
+          #
+          # This also replaces the old NPM_TOKEN setup, which could not
+          # work: npm now issues only granular tokens, the packages require
+          # "a granular access token with bypass 2fa enabled", and the token
+          # in use had no 2FA bypass — so every publish was challenged for
+          # an OTP and died as ERR_PNPM_OTP_NON_INTERACTIVE.
+          #
+          # Provenance comes along for free: pnpm attaches an attestation
+          # when it publishes through OIDC, so released tarballs are
+          # verifiably built by this workflow.
+          #
+          # Requires `id-token: write` above. See docs/releases.md.
+          # ---------------------------------------------------------------
+
+      # pnpm reports a failed OIDC exchange as a `Skipped OIDC:` warning and
+      # then falls through to a credential-less publish, and it echoes the
+      # prepublishOnly script line next to the error — which reads as though
+      # the guard rejected the publish. It did not.
+      - name: Explain a failed publish
+        if: failure() && steps.changesets.outcome == 'failure'
+        run: |
+          {
+            echo "### Publish failed"
+            echo
+            echo "Look for \`Skipped OIDC:\` in the log above."
+            echo
+            echo "- **Present** — the trusted-publisher exchange was refused. The package"
+            echo "  is most likely missing its trusted publisher on npmjs.com, or has one"
+            echo "  whose workflow filename is not \`release.yml\`. Configure it at"
+            echo "  npmjs.com -> the package -> Settings -> Trusted Publisher:"
+            echo "  \`${{ github.repository_owner }}\` / \`${{ github.event.repository.name }}\` / \`release.yml\`, no environment."
+            echo "- **Absent, with \`ERR_PNPM_OTP_NON_INTERACTIVE\`** — something reintroduced"
+            echo "  a token into the publish step's env and the registry challenged the"
+            echo "  write with 2FA. Remove it; this pipeline publishes via OIDC only."
+            echo
+            echo "The \`assert-publish-safe.mjs\` line printed beside the error is the"
+            echo "prepublishOnly script being echoed. It is not the cause."
+            echo
+            echo "Nothing was published — see docs/releases.md."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Release run"
+            echo
+            if [ "${{ steps.changesets.outputs.published }}" = "true" ]; then
+              echo "Published:"
+              echo '```json'
+              echo '${{ steps.changesets.outputs.publishedPackages }}'
+              echo '```'
+            elif [ -n "${{ steps.changesets.outputs.pullRequestNumber }}" ]; then
+              echo "Version PR: #${{ steps.changesets.outputs.pullRequestNumber }} — review and merge it to publish."
+            else
+              echo "No changesets pending. Nothing to version, nothing to publish."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,7 @@
+{
+  "type": "room.join",
+  "roomId": "room_123",
+  "resume": {
+    "token": "rt_abc"
+  }
+}

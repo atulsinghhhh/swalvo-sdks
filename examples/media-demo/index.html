@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Swalvo Media Demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      p.hint {
+        color: #666;
+        font-size: 0.9rem;
+      }
+      fieldset {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.4rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+      button {
+        margin-top: 0.6rem;
+        margin-right: 0.4rem;
+        padding: 0.4rem 0.8rem;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+      #status {
+        font-weight: 600;
+      }
+      #status.connected {
+        color: #16794a;
+      }
+      #status.disconnected,
+      #status.failed {
+        color: #a11;
+      }
+      #status.connecting,
+      #status.reconnecting {
+        color: #b8860b;
+      }
+      #participants li {
+        font-family: monospace;
+      }
+      .video-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .tile {
+        width: 260px;
+      }
+      .tile video {
+        width: 100%;
+        background: #000;
+        border-radius: 6px;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+      }
+      .tile .label {
+        font-size: 0.75rem;
+        text-align: center;
+        margin-top: 0.2rem;
+      }
+      #log {
+        height: 160px;
+        overflow-y: auto;
+        background: #111;
+        color: #ddd;
+        font-family: monospace;
+        font-size: 0.75rem;
+        padding: 0.6rem;
+        border-radius: 6px;
+        margin-top: 0.6rem;
+      }
+      table.stats {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+      }
+      table.stats th,
+      table.stats td {
+        text-align: left;
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+        font-family: monospace;
+      }
+      .dep-up {
+        color: #16794a;
+        font-weight: 600;
+      }
+      .dep-down {
+        color: #a11;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Swalvo Media Demo</h1>
+    <p class="hint">
+      Real WebRTC media through Swalvo's managed RTC infrastructure — not a mock. This page is built entirely on
+      <code>@swalvo/rtc</code>'s public API; nothing here talks to the underlying media server directly (see
+      <code>app.js</code>). A token is minted for you by the small backend in <code>server.py</code> — see the README
+      for how to run it. Open this page in multiple tabs with different identities (same room) to test a group call.
+    </p>
+
+    <fieldset>
+      <legend>Join a room</legend>
+      <label for="roomInput">Room name</label>
+      <input id="roomInput" value="demo-room" />
+      <label for="identityInput">Your identity</label>
+      <input id="identityInput" value="alice" />
+      <button id="joinBtn">Join Room</button>
+      <button id="leaveBtn" disabled>Leave Room</button>
+      <div>Status: <span id="status" class="disconnected">disconnected</span></div>
+      <div>Room: <span id="roomLabel">—</span> &nbsp; User: <span id="userLabel">—</span></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Controls</legend>
+      <button id="micBtn" disabled>Mic: off</button>
+      <button id="camBtn" disabled>Camera: off</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Local</legend>
+      <div class="video-grid">
+        <div class="tile">
+          <video id="localVideo" autoplay playsinline muted></video>
+          <div class="label" id="localLabel">(not joined)</div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Remote participants</legend>
+      <ul id="participants"></ul>
+      <div class="video-grid" id="remoteGrid"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Live connection stats</legend>
+      <p class="hint">
+        From <code>room.getConnectionStats()</code> — real send/receive figures for every published/subscribed track,
+        polled every 2s while connected. This is the SDK's actual supported diagnostics surface; an earlier version of
+        this page instead reached into an undocumented, non-public part of the underlying media client to approximate
+        this, which is exactly the kind of provider-specific detail <code>@swalvo/rtc</code> exists to make unnecessary.
+      </p>
+      <div>Quality: <span id="connectionQuality">—</span></div>
+      <table class="stats" id="statsTable">
+        <thead>
+          <tr>
+            <th>Track</th>
+            <th>Dir</th>
+            <th>Bitrate</th>
+            <th>Loss</th>
+            <th>Jitter</th>
+            <th>RTT</th>
+            <th>Codec</th>
+          </tr>
+        </thead>
+        <tbody id="statsBody">
+          <tr>
+            <td colspan="7">Not connected.</td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend>Project diagnostics</legend>
+      <p class="hint">
+        Signaling/SFU/TURN health and this project's active-connection count, from the backend's
+        <code>GET /api/diagnostics</code> — a thin pass-through of <code>swalvo.diagnostics.get()</code> (<code
+          >swalvo/resources/diagnostics.py</code
+        >
+        in the Python SDK). Server-side, project-scoped, and independent of whether this page itself is connected to
+        anything.
+      </p>
+      <div id="diagnostics">Loading…</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Log</legend>
+      <div id="log"></div>
+    </fieldset>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@swalvo/rtc": "./swalvo-rtc.js"
+        }
+      }
+    </script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

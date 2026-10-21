@@ -1,0 +1,45 @@
+# Analyzer configuration for this package.
+#
+# flutter_lints was already a dev_dependency but nothing included it, so the
+# rule set shipped installed and unenforced. This file turns it on and adds
+# the checks that matter for a package other people depend on.
+#
+# Deliberately NOT enabled: strict-inference and the style family
+# (unnecessary_lambdas, directives_ordering, prefer_final_locals, ...).
+# Tried them — they produced findings only in test fixtures and cosmetics,
+# which is churn rather than defect-finding.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    # An implicit downcast or a raw type crossing a published API becomes a
+    # type hole in the consumer's code, not just ours.
+    strict-casts: true
+    strict-raw-types: true
+
+  errors:
+    # Latent bugs, not style: a dropped future here is a message that
+    # silently never sends.
+    unawaited_futures: error
+
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - ".dart_tool/**"
+    - build/**
+
+linter:
+  rules:
+    # Async correctness. These SDKs are almost entirely async and hold
+    # long-lived subscriptions to sockets and media tracks.
+    - avoid_void_async
+    - cancel_subscriptions
+    - close_sinks
+
+    # Correctness.
+    - avoid_slow_async_io
+    - no_adjacent_strings_in_list
+    - throw_in_finally
+    - test_types_in_equals
+    - unrelated_type_equality_checks
+    - avoid_relative_lib_imports

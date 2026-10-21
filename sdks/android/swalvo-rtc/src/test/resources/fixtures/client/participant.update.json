@@ -1,0 +1,6 @@
+{
+  "type": "participant.update",
+  "attributes": {
+    "hand": "raised"
+  }
+}

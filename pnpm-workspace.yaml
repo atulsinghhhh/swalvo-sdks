@@ -1,0 +1,23 @@
+packages:
+  - "packages/*"
+
+# Advisories pinned by transitive parents we do not control; each override is
+# the only lever. Drop an entry once its parent ships the fix.
+overrides:
+  # GHSA for image-size <=2.0.2. Reached only through react-native's metro dev
+  # tooling under react-native-video; fix exists only on 2.x.
+  image-size@<2.0.3: ^2.0.4
+  ws@^8: ^8.21.3
+  lodash: ^4.18.1
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  unrs-resolver: true
+  '@scarf/scarf': false
+
+auditConfig:
+  ignoreGhsas:
+    # braces <=3.0.3: no patched release; reached only through react-native's
+    # metro file map (dev tooling nothing here executes).
+    - GHSA-vfj7-8cjw-p6xm

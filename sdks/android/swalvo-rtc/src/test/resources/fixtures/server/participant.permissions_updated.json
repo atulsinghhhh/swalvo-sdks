@@ -1,0 +1,10 @@
+{
+  "type": "participant.permissions_updated",
+  "permissions": {
+    "subscribe": true,
+    "publish": false,
+    "publishAudio": false,
+    "publishVideo": false,
+    "publishData": false
+  }
+}

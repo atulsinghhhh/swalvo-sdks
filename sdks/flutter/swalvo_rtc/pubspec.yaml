@@ -1,0 +1,50 @@
+name: swalvo_rtc
+description: >-
+  Swalvo SDK for Flutter — join a room, publish camera and microphone, render
+  participants. Hides WebRTC, SDP, ICE, STUN, TURN and the media server behind
+  a small typed API.
+version: 0.3.0
+homepage: https://github.com/atulsinghhhh/swalvo-sdks
+repository: https://github.com/atulsinghhhh/swalvo-sdks
+issue_tracker: https://github.com/atulsinghhhh/swalvo-sdks/issues
+documentation: https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/flutter.md
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # The native WebRTC implementation for iOS, Android, macOS and Web.
+  # Same role react-native-webrtc plays in @swalvo/react-native: it
+  # provides RTCPeerConnection, getUserMedia and the renderer, and it is
+  # never re-exported from this package's public API.
+  flutter_webrtc: ^1.6.2+hotfix.3
+  # The signaling transport. package:web_socket_channel rather than
+  # dart:io's WebSocket because Flutter Web is a supported target and
+  # dart:io is unavailable there.
+  web_socket_channel: ^3.0.0
+  meta: ^1.15.0
+  # HMAC-SHA256 for the E2EE passphrase derivation (PBKDF2) and ratchet
+  # (HKDF). Pure Dart, no native code; the frame crypto itself is
+  # flutter_webrtc's native FrameCryptor.
+  crypto: ^3.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  fake_async: ^1.3.0
+  # Test-only AES-GCM, to check the shared E2EE frame vectors in Dart.
+  pointycastle: ^4.0.0
+
+# Deliberately not declared as a plugin. swalvo_rtc ships no platform
+# channels and no native code: the iOS and Android WebRTC implementation
+# arrives through flutter_webrtc. A second native layer would mean two
+# implementations competing for the same camera.
+#
+# What this package *does* own, and previously did not, is the signaling
+# protocol and the peer-connection lifecycle — see lib/src/internal. Those
+# used to come from livekit_client; they are Swalvo's own now, which is what
+# lets Swalvo's SFU change without an SDK release.

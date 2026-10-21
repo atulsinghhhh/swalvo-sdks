@@ -1,0 +1,939 @@
+/*
+ * @swalvo/react/video/styles.css — optional default styles for the video UI kit.
+ *
+ * The components render unstyled; import this for a ready-made look in
+ * Swalvo's Graphite identity: dark-first, a #0a0a0a canvas, #262626
+ * hairlines, paper-white primary, orange reserved for links, Inter.
+ *
+ * Every rule is scoped under `.swalvo-video`, which <VideoConference> and
+ * <PreJoin> put on their root. Rendering a piece on its own (a
+ * <ParticipantTile>, a <ControlBar>)? Wrap it in any element with
+ * `class="swalvo-video"`.
+ *
+ * A theme is a matter of overriding the custom properties below on
+ * `.swalvo-video` (or any ancestor). A light variant applies with
+ * `data-theme="light"`, and for a light OS preference when no theme is
+ * forced.
+ */
+
+.swalvo-video {
+  --swalvo-bg: #0a0a0a;
+  --swalvo-surface: #141414;
+  --swalvo-surface-hover: #1c1c1c;
+  --swalvo-tile-bg: #111111;
+  --swalvo-border: #262626;
+  --swalvo-text: #fafafa;
+  --swalvo-text-muted: #a3a3a3;
+  --swalvo-primary: #fafafa;
+  --swalvo-primary-text: #0a0a0a;
+  --swalvo-link: #f97316;
+  --swalvo-danger: #ef4444;
+  --swalvo-danger-text: #fafafa;
+  --swalvo-success: #22c55e;
+  --swalvo-warning: #eab308;
+  --swalvo-speaking: #fafafa;
+  --swalvo-overlay: rgba(10, 10, 10, 0.72);
+  /* Captions stay light-on-dark in both themes, like broadcast captions. */
+  --swalvo-caption-bg: rgba(10, 10, 10, 0.78);
+  --swalvo-caption-text: #fafafa;
+  --swalvo-radius: 10px;
+  --swalvo-gap: 8px;
+  --swalvo-control-height: 40px;
+  --swalvo-chat-width: 360px;
+  --swalvo-carousel-size: 220px;
+  --swalvo-font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  box-sizing: border-box;
+  background: var(--swalvo-bg);
+  color: var(--swalvo-text);
+  font-family: var(--swalvo-font);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: light) {
+  .swalvo-video:not([data-theme='dark']) {
+    --swalvo-bg: #ffffff;
+    --swalvo-surface: #f5f5f5;
+    --swalvo-surface-hover: #ededed;
+    --swalvo-tile-bg: #f0f0f0;
+    --swalvo-border: #e5e5e5;
+    --swalvo-text: #0a0a0a;
+    --swalvo-text-muted: #525252;
+    --swalvo-primary: #0a0a0a;
+    --swalvo-primary-text: #fafafa;
+    --swalvo-link: #c2410c;
+    --swalvo-speaking: #0a0a0a;
+    --swalvo-overlay: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.swalvo-video[data-theme='light'],
+[data-theme='light'] .swalvo-video {
+  --swalvo-bg: #ffffff;
+  --swalvo-surface: #f5f5f5;
+  --swalvo-surface-hover: #ededed;
+  --swalvo-tile-bg: #f0f0f0;
+  --swalvo-border: #e5e5e5;
+  --swalvo-text: #0a0a0a;
+  --swalvo-text-muted: #525252;
+  --swalvo-primary: #0a0a0a;
+  --swalvo-primary-text: #fafafa;
+  --swalvo-link: #c2410c;
+  --swalvo-speaking: #0a0a0a;
+  --swalvo-overlay: rgba(255, 255, 255, 0.8);
+}
+
+.swalvo-video *,
+.swalvo-video *::before,
+.swalvo-video *::after {
+  box-sizing: inherit;
+}
+
+.swalvo-video a {
+  color: var(--swalvo-link);
+}
+
+.swalvo-video .swalvo-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.swalvo-video .swalvo-icon {
+  flex: none;
+}
+
+/* Buttons ---------------------------------------------------------------- */
+
+.swalvo-video .swalvo-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--swalvo-control-height);
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--swalvo-text);
+  background: var(--swalvo-surface);
+  border: 1px solid var(--swalvo-border);
+  border-radius: var(--swalvo-radius);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+.swalvo-video .swalvo-button:hover:not(:disabled) {
+  background: var(--swalvo-surface-hover);
+}
+.swalvo-video .swalvo-button:disabled,
+.swalvo-video .swalvo-button[data-pending] {
+  opacity: 0.55;
+}
+.swalvo-video .swalvo-button:disabled {
+  cursor: not-allowed;
+}
+.swalvo-video .swalvo-button[data-pending] {
+  cursor: progress;
+}
+.swalvo-video .swalvo-button[data-variant='primary'] {
+  background: var(--swalvo-primary);
+  color: var(--swalvo-primary-text);
+  border-color: var(--swalvo-primary);
+}
+.swalvo-video .swalvo-button[data-variant='primary']:hover:not(:disabled) {
+  background: var(--swalvo-primary);
+  opacity: 0.9;
+}
+.swalvo-video .swalvo-button[data-variant='danger'] {
+  background: var(--swalvo-danger);
+  border-color: var(--swalvo-danger);
+  color: var(--swalvo-danger-text);
+}
+.swalvo-video .swalvo-button[data-variant='danger']:hover:not(:disabled) {
+  background: var(--swalvo-danger);
+  opacity: 0.9;
+}
+.swalvo-video .swalvo-button[data-variant='ghost'] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* An off mic/camera reads as off at a glance. */
+.swalvo-video .swalvo-track-toggle[data-source='microphone']:not([data-enabled]) .swalvo-icon,
+.swalvo-video .swalvo-track-toggle[data-source='camera']:not([data-enabled]) .swalvo-icon {
+  color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-track-toggle[data-source='screenShare'][data-enabled],
+.swalvo-video .swalvo-chat-toggle[data-enabled],
+.swalvo-video .swalvo-captions-toggle[data-enabled] {
+  background: var(--swalvo-primary);
+  color: var(--swalvo-primary-text);
+  border-color: var(--swalvo-primary);
+}
+.swalvo-video .swalvo-track-toggle[data-error] {
+  border-color: var(--swalvo-danger);
+}
+
+.swalvo-video :is(.swalvo-button, .swalvo-menu__item, .swalvo-input, .swalvo-select, .swalvo-carousel):focus-visible,
+.swalvo-video .swalvo-grid-layout:focus-visible {
+  outline: 2px solid var(--swalvo-text);
+  outline-offset: 2px;
+}
+
+.swalvo-video .swalvo-button-group {
+  display: inline-flex;
+}
+.swalvo-video .swalvo-button-group > .swalvo-button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.swalvo-video .swalvo-button-group > .swalvo-device-menu > .swalvo-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left-width: 0;
+  padding: 0 8px;
+}
+
+/* Conference shell -------------------------------------------------------- */
+
+.swalvo-video.swalvo-video-conference {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.swalvo-video-conference__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.swalvo-video-conference__stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--swalvo-gap);
+}
+.swalvo-video-conference__chat {
+  display: flex;
+  flex-direction: column;
+  width: var(--swalvo-chat-width);
+  min-height: 0;
+  border-left: 1px solid var(--swalvo-border);
+  background: var(--swalvo-bg);
+}
+.swalvo-video-conference__chat[hidden] {
+  display: none;
+}
+.swalvo-video-conference__overlays {
+  position: absolute;
+  top: calc(var(--swalvo-gap) * 2);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--swalvo-gap);
+  pointer-events: none;
+}
+.swalvo-video-conference__overlays > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 720px) {
+  .swalvo-video-conference__chat {
+    position: absolute;
+    inset: 0 0 calc(var(--swalvo-control-height) + 25px) 0;
+    width: auto;
+    z-index: 10;
+    border-left: 0;
+  }
+  .swalvo-video-conference__body {
+    position: relative;
+  }
+}
+
+/* Grid ------------------------------------------------------------------- */
+
+.swalvo-video .swalvo-grid-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--swalvo-gap);
+  height: 100%;
+  min-height: 0;
+}
+.swalvo-video .swalvo-grid-layout__tiles {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  gap: var(--swalvo-gap);
+  grid-template-columns: repeat(var(--swalvo-grid-columns, 1), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--swalvo-grid-rows, 1), minmax(0, 1fr));
+}
+
+.swalvo-video .swalvo-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--swalvo-gap);
+  color: var(--swalvo-text-muted);
+  font-size: 13px;
+}
+.swalvo-video .swalvo-pagination .swalvo-button {
+  min-height: 32px;
+  padding: 0 8px;
+}
+
+/* Focus ------------------------------------------------------------------ */
+
+.swalvo-video .swalvo-focus-layout {
+  display: flex;
+  gap: var(--swalvo-gap);
+  height: 100%;
+  min-height: 0;
+}
+.swalvo-video .swalvo-focus-layout__main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+.swalvo-video .swalvo-focus-layout__main > .swalvo-participant-tile {
+  flex: 1;
+}
+.swalvo-video .swalvo-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--swalvo-gap);
+  width: var(--swalvo-carousel-size);
+  flex: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.swalvo-video .swalvo-carousel > .swalvo-participant-tile {
+  flex: none;
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 720px) {
+  .swalvo-video .swalvo-focus-layout {
+    flex-direction: column;
+  }
+  .swalvo-video .swalvo-carousel {
+    flex-direction: row;
+    width: auto;
+    height: calc(var(--swalvo-carousel-size) * 9 / 16);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .swalvo-video .swalvo-carousel > .swalvo-participant-tile {
+    height: 100%;
+  }
+}
+
+/* Participant tile ------------------------------------------------------- */
+
+.swalvo-video .swalvo-participant-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--swalvo-tile-bg);
+  border: 1px solid var(--swalvo-border);
+  border-radius: var(--swalvo-radius);
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+.swalvo-video .swalvo-participant-tile[data-speaking] {
+  border-color: var(--swalvo-speaking);
+  box-shadow: inset 0 0 0 1px var(--swalvo-speaking);
+}
+.swalvo-video .swalvo-participant-tile__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+.swalvo-video .swalvo-participant-tile__video[data-fit='contain'] {
+  object-fit: contain;
+}
+.swalvo-video .swalvo-participant-tile__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.swalvo-video .swalvo-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(40px, 22%, 96px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--swalvo-surface-hover);
+  border: 1px solid var(--swalvo-border);
+  color: var(--swalvo-text);
+  font-weight: 600;
+  font-size: clamp(14px, 2.2vw, 28px);
+  letter-spacing: 0.02em;
+}
+.swalvo-video .swalvo-participant-tile__meta {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  max-width: calc(100% - 16px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--swalvo-overlay);
+  font-size: 12px;
+  font-weight: 500;
+}
+.swalvo-video .swalvo-participant-tile__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.swalvo-video .swalvo-participant-tile__you,
+.swalvo-video .swalvo-participant-tile__source {
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-participant-tile__muted {
+  display: inline-flex;
+  color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-participant-tile__notice {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--swalvo-overlay);
+  border: 1px solid var(--swalvo-border);
+  color: var(--swalvo-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.swalvo-video .swalvo-participant-tile__pin {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-height: 30px;
+  padding: 0 7px;
+  background: var(--swalvo-overlay);
+  opacity: 0;
+}
+.swalvo-video .swalvo-participant-tile:hover .swalvo-participant-tile__pin,
+.swalvo-video .swalvo-participant-tile__pin:focus-visible,
+.swalvo-video .swalvo-participant-tile__pin[aria-pressed='true'] {
+  opacity: 1;
+}
+@media (hover: none) {
+  .swalvo-video .swalvo-participant-tile__pin {
+    opacity: 1;
+  }
+}
+
+.swalvo-video .swalvo-e2ee-badge {
+  display: inline-flex;
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-e2ee-badge:not([data-state='ok']) {
+  color: var(--swalvo-warning);
+}
+
+/* Connection quality ----------------------------------------------------- */
+
+.swalvo-video .swalvo-connection-quality {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.swalvo-video .swalvo-connection-quality__bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+.swalvo-video .swalvo-connection-quality__bar {
+  width: 3px;
+  border-radius: 1px;
+  background: var(--swalvo-border);
+}
+.swalvo-video .swalvo-connection-quality__bar:nth-child(1) {
+  height: 4px;
+}
+.swalvo-video .swalvo-connection-quality__bar:nth-child(2) {
+  height: 7px;
+}
+.swalvo-video .swalvo-connection-quality__bar:nth-child(3) {
+  height: 10px;
+}
+.swalvo-video .swalvo-connection-quality__bar[data-active] {
+  background: var(--swalvo-text);
+}
+.swalvo-video .swalvo-connection-quality[data-quality='poor'] .swalvo-connection-quality__bar[data-active] {
+  background: var(--swalvo-warning);
+}
+.swalvo-video .swalvo-connection-quality[data-quality='lost'] .swalvo-connection-quality__bar {
+  background: var(--swalvo-danger);
+  opacity: 0.6;
+}
+
+/* Control bar ------------------------------------------------------------ */
+
+.swalvo-video .swalvo-control-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--swalvo-gap);
+  padding: 12px;
+  border-top: 1px solid var(--swalvo-border);
+  background: var(--swalvo-bg);
+}
+.swalvo-video .swalvo-disconnect-button {
+  margin-left: calc(var(--swalvo-gap) * 2);
+}
+@media (max-width: 560px) {
+  .swalvo-video .swalvo-control-bar .swalvo-button__label {
+    display: none;
+  }
+  .swalvo-video .swalvo-disconnect-button {
+    margin-left: 0;
+  }
+}
+
+/* Device menu ------------------------------------------------------------ */
+
+.swalvo-video .swalvo-device-menu {
+  position: relative;
+  display: inline-flex;
+}
+.swalvo-video .swalvo-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 260px;
+  max-width: min(360px, 90vw);
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--swalvo-surface);
+  border: 1px solid var(--swalvo-border);
+  border-radius: var(--swalvo-radius);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+.swalvo-video .swalvo-menu__group + .swalvo-menu__group {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--swalvo-border);
+}
+.swalvo-video .swalvo-menu__heading {
+  padding: 6px 10px 4px;
+  color: var(--swalvo-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.swalvo-video .swalvo-menu__heading[data-hidden] {
+  display: none;
+}
+.swalvo-video .swalvo-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.swalvo-video .swalvo-menu__item:hover,
+.swalvo-video .swalvo-menu__item:focus-visible {
+  background: var(--swalvo-surface-hover);
+}
+.swalvo-video .swalvo-menu__item[aria-checked='true']::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--swalvo-text);
+}
+.swalvo-video .swalvo-menu__item[aria-disabled='true'] {
+  cursor: default;
+  color: var(--swalvo-text-muted);
+}
+
+/* Toasts, start audio ---------------------------------------------------- */
+
+.swalvo-video .swalvo-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--swalvo-border);
+  background: var(--swalvo-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+  font-weight: 500;
+}
+.swalvo-video .swalvo-toast[data-kind='error'] {
+  border-color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-toast[data-kind='warning'] {
+  border-color: var(--swalvo-warning);
+}
+
+.swalvo-video .swalvo-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--swalvo-border);
+  border-top-color: var(--swalvo-text);
+  border-radius: 50%;
+  animation: swalvo-spin 0.8s linear infinite;
+}
+@keyframes swalvo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pre-join --------------------------------------------------------------- */
+
+.swalvo-video.swalvo-prejoin {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid var(--swalvo-border);
+  border-radius: calc(var(--swalvo-radius) + 4px);
+}
+@media (max-width: 680px) {
+  .swalvo-video.swalvo-prejoin {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+}
+.swalvo-video .swalvo-prejoin__preview {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--swalvo-radius);
+  border: 1px solid var(--swalvo-border);
+  background: var(--swalvo-tile-bg);
+}
+.swalvo-video .swalvo-prejoin__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swalvo-video .swalvo-prejoin__preview .swalvo-prejoin__error {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  margin: 0;
+}
+.swalvo-video .swalvo-prejoin__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.swalvo-video .swalvo-prejoin__row {
+  display: flex;
+  gap: var(--swalvo-gap);
+}
+.swalvo-video .swalvo-prejoin__row .swalvo-track-toggle {
+  flex: none;
+}
+.swalvo-video .swalvo-prejoin__row .swalvo-prejoin__field {
+  flex: 1;
+  min-width: 0;
+}
+.swalvo-video .swalvo-prejoin__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.swalvo-video .swalvo-label {
+  color: var(--swalvo-text-muted);
+  font-size: 13px;
+}
+.swalvo-video .swalvo-input,
+.swalvo-video .swalvo-select {
+  width: 100%;
+  min-height: var(--swalvo-control-height);
+  padding: 0 12px;
+  font: inherit;
+  color: var(--swalvo-text);
+  background: var(--swalvo-surface);
+  border: 1px solid var(--swalvo-border);
+  border-radius: var(--swalvo-radius);
+}
+.swalvo-video .swalvo-select {
+  text-overflow: ellipsis;
+}
+.swalvo-video .swalvo-prejoin__join {
+  width: 100%;
+}
+.swalvo-video .swalvo-prejoin__error {
+  color: var(--swalvo-danger);
+  font-size: 13px;
+  margin: 0;
+}
+
+.swalvo-video .swalvo-audio-meter {
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--swalvo-border);
+}
+.swalvo-video .swalvo-audio-meter__fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--swalvo-text);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 90ms linear;
+}
+
+/* Connection test -------------------------------------------------------- */
+
+.swalvo-video .swalvo-connection-test {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--swalvo-border);
+}
+.swalvo-video .swalvo-connection-test__stage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-connection-test__summary {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+.swalvo-video .swalvo-connection-test__results:not([data-ok]) .swalvo-connection-test__summary {
+  color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-connection-test__checks {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 13px;
+}
+.swalvo-video .swalvo-connection-test__checks dt {
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-connection-test__checks dd {
+  margin: 0;
+  min-width: 0;
+}
+.swalvo-video .swalvo-connection-test__detail {
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-status[data-status='passed'] {
+  color: var(--swalvo-success);
+}
+.swalvo-video .swalvo-status[data-status='failed'] {
+  color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-status[data-status='skipped'] {
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-connection-test__issues {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+.swalvo-video .swalvo-connection-test__issues li[data-severity='error'] {
+  color: var(--swalvo-danger);
+}
+.swalvo-video .swalvo-connection-test__issues li[data-severity='warning'] {
+  color: var(--swalvo-warning);
+}
+
+/* Captions, agent visualizer ------------------------------------------- */
+
+.swalvo-video .swalvo-captions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: min(720px, calc(100% - var(--swalvo-gap) * 4));
+  margin: 0 auto;
+  pointer-events: none;
+}
+.swalvo-video .swalvo-captions[data-empty] {
+  visibility: hidden;
+}
+.swalvo-video .swalvo-captions__line {
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: var(--swalvo-caption-bg);
+  color: var(--swalvo-caption-text);
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.swalvo-video .swalvo-captions__line[data-interim] .swalvo-captions__text {
+  font-style: italic;
+  opacity: 0.85;
+}
+.swalvo-video .swalvo-captions__line[data-final] {
+  /* Fades over its last 400 ms; `--swalvo-caption-remaining` is set per line. */
+  animation: swalvo-caption-fade 400ms ease-in forwards;
+  animation-delay: calc(var(--swalvo-caption-remaining, 6000ms) - 400ms);
+}
+.swalvo-video .swalvo-captions__speaker {
+  font-weight: 600;
+  opacity: 0.7;
+}
+@keyframes swalvo-caption-fade {
+  to {
+    opacity: 0;
+  }
+}
+/* Inside <VideoConference>: pinned to the bottom of the stage. */
+.swalvo-video-conference__captions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--swalvo-gap) * 2);
+  z-index: 4;
+}
+
+.swalvo-video .swalvo-agent-visualizer {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.swalvo-video .swalvo-agent-visualizer__ring {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 2px solid var(--swalvo-border);
+  background: var(--swalvo-surface);
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+.swalvo-video .swalvo-agent-visualizer[data-state='listening'] .swalvo-agent-visualizer__ring {
+  border-color: var(--swalvo-text-muted);
+  animation: swalvo-agent-breathe 2.4s ease-in-out infinite;
+}
+.swalvo-video .swalvo-agent-visualizer[data-state='thinking'] .swalvo-agent-visualizer__ring {
+  border-color: var(--swalvo-border);
+  border-top-color: var(--swalvo-text);
+  animation: swalvo-spin 1s linear infinite;
+}
+.swalvo-video .swalvo-agent-visualizer[data-state='thinking'] .swalvo-agent-visualizer__bars {
+  /* Keep the bars upright while the ring spins. */
+  animation: swalvo-spin 1s linear infinite reverse;
+}
+.swalvo-video .swalvo-agent-visualizer[data-state='speaking'] .swalvo-agent-visualizer__ring {
+  border-color: var(--swalvo-speaking);
+  box-shadow: 0 0 0 4px rgba(250, 250, 250, 0.08);
+}
+.swalvo-video .swalvo-agent-visualizer[data-state='ended'] {
+  opacity: 0.5;
+}
+.swalvo-video .swalvo-agent-visualizer__bars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+}
+.swalvo-video .swalvo-agent-visualizer__bar {
+  width: 6px;
+  height: calc(6px + 34px * var(--swalvo-agent-level, 0));
+  border-radius: 3px;
+  background: var(--swalvo-text);
+  transition: height 90ms linear;
+}
+.swalvo-video .swalvo-agent-visualizer:not([data-state='speaking']) .swalvo-agent-visualizer__bar {
+  background: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-agent-visualizer__label {
+  font-size: 13px;
+  color: var(--swalvo-text-muted);
+}
+.swalvo-video .swalvo-agent-visualizer__name {
+  color: var(--swalvo-text);
+  font-weight: 500;
+}
+@keyframes swalvo-agent-breathe {
+  50% {
+    box-shadow: 0 0 0 6px rgba(163, 163, 163, 0.12);
+  }
+}
+
+/* Reduced motion --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .swalvo-video *,
+  .swalvo-video *::before,
+  .swalvo-video *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .swalvo-video .swalvo-spinner {
+    border-top-color: var(--swalvo-border);
+    border-color: var(--swalvo-text-muted);
+  }
+}

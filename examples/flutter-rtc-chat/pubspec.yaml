@@ -1,0 +1,23 @@
+name: swalvo_example_rtc_chat
+description: "Flutter: a Swalvo video call with a chat panel. Real RTC, real messaging, no mocks."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  swalvo_rtc: ^0.3.0
+  swalvo_chat: ^0.2.0
+  http: ^1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

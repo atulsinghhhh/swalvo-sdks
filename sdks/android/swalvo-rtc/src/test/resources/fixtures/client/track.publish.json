@@ -1,0 +1,5 @@
+{
+  "type": "track.publish",
+  "trackId": "abc-123",
+  "source": "screenShare"
+}

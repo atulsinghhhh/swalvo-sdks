@@ -1,0 +1,5 @@
+{
+  "type": "connection.state",
+  "iceState": "connected",
+  "peerState": "connected"
+}

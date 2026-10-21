@@ -1,0 +1,26 @@
+{
+  "type": "room.joined",
+  "roomId": "room_123",
+  "rtcServer": "sfu-asia-02",
+  "region": "asia-south",
+  "participants": [
+    {
+      "id": "bob",
+      "tracks": [
+        {
+          "trackId": "bob-cam",
+          "kind": "video",
+          "source": "camera",
+          "muted": false,
+          "simulcast": true,
+          "layers": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      ]
+    }
+  ],
+  "resumeToken": "rt_1"
+}

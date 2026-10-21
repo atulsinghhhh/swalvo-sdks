@@ -1,0 +1,9 @@
+{
+  "type": "quality.changed",
+  "updates": [
+    {
+      "participantId": "alice",
+      "quality": "good"
+    }
+  ]
+}

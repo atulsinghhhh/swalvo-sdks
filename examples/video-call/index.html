@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Swalvo video-call example (@swalvo/rtc)</title>
+    <style>
+      body {
+        font-family: -apple-system, system-ui, sans-serif;
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        background: #0b0d12;
+        color: #e6e6e6;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      p.sub {
+        color: #9aa0a6;
+      }
+      textarea {
+        width: 100%;
+        height: 5rem;
+        font-family: monospace;
+        font-size: 0.8rem;
+        background: #14161c;
+        color: #e6e6e6;
+        border: 1px solid #2a2d35;
+        border-radius: 4px;
+        padding: 0.5rem;
+      }
+      fieldset {
+        border: 1px solid #2a2d35;
+        border-radius: 6px;
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      legend {
+        padding: 0 0.5rem;
+        color: #9aa0a6;
+      }
+      button {
+        background: #1f2430;
+        color: #e6e6e6;
+        border: 1px solid #343945;
+        border-radius: 4px;
+        padding: 0.4rem 0.8rem;
+        margin-right: 0.5rem;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      video {
+        width: 240px;
+        background: #000;
+        border-radius: 6px;
+      }
+      .participant {
+        display: inline-block;
+        margin: 0.5rem;
+        text-align: center;
+      }
+      .label {
+        font-size: 0.8rem;
+        color: #9aa0a6;
+        margin-top: 0.25rem;
+      }
+      #log {
+        background: #0f1116;
+        border: 1px solid #2a2d35;
+        border-radius: 6px;
+        padding: 0.5rem;
+        height: 10rem;
+        overflow-y: auto;
+        font-size: 0.75rem;
+        white-space: pre-wrap;
+      }
+      #status {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Swalvo video-call example</h1>
+    <p class="sub">
+      Everything below is built on <code>@swalvo/rtc</code>'s public API only — no SDP, ICE, or RTCPeerConnection.
+    </p>
+
+    <fieldset>
+      <legend>1. RTC token</legend>
+      <p class="sub">
+        Paste the full JSON body returned by <code>POST /v1/rooms/:roomId/rtc-tokens</code> (mint one via Swagger UI at
+        <code>/docs</code>, or use two different <code>participantIdentity</code> values in the same room to test a call
+        between two tabs).
+      </p>
+      <textarea
+        id="tokenInput"
+        placeholder='{"token":"...","endpoint":"ws://localhost:7880","roomName":"...","iceServers":[...]}'
+      ></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Join</legend>
+      <button id="joinButton">Join Room</button>
+      <button id="leaveButton" disabled>Leave Room</button>
+      <button id="micButton" disabled>Mic: off</button>
+      <button id="cameraButton" disabled>Camera: off</button>
+      <p>Status: <span id="status">not joined</span></p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Local</legend>
+      <div id="localVideo">(not joined)</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Remote participants</legend>
+      <div id="remoteVideos"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Log</legend>
+      <pre id="log"></pre>
+    </fieldset>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@swalvo/rtc": "./swalvo-rtc.js"
+        }
+      }
+    </script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

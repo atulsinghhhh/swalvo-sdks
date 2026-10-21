@@ -1,0 +1,29 @@
+{
+  "name": "swalvo-example-mobile-rtc-chat",
+  "private": true,
+  "version": "0.1.0",
+  "description": "React Native: a Swalvo video call with a chat panel. Real RTC, real messaging, no mocks.",
+  "scripts": {
+    "server": "node server.mjs",
+    "typecheck": "tsc --noEmit",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android",
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "@swalvo/chat": "^0.1.0",
+    "@swalvo/react-native": "^0.1.0",
+    "@swalvo/rtc": "^0.4.0",
+    "@react-native-community/netinfo": "^11.4.1",
+    "react": "^18.3.1",
+    "react-native": "^0.76.5",
+    "react-native-incall-manager": "^4.2.2",
+    "react-native-webrtc": "^124.0.8"
+  },
+  "devDependencies": {
+    "@swalvo/server": "^0.1.0",
+    "@types/react": "^18.3.12",
+    "express": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

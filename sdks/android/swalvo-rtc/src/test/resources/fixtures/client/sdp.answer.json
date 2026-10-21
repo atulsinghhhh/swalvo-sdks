@@ -1,0 +1,4 @@
+{
+  "type": "sdp.answer",
+  "sdp": "v=0\r\no=- 1 2 IN IP4 127.0.0.1\r\n"
+}

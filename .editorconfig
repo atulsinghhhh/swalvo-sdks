@@ -1,0 +1,46 @@
+# Editor defaults, matched to what each ecosystem's formatter already
+# enforces — this file exists so an editor agrees with CI before you save,
+# not to introduce a second opinion.
+#
+# Authorities, if this file and a formatter ever disagree: Prettier
+# (.prettierrc.json) for TS/JS/JSON, gofmt for Go, `ruff format`
+# (sdks/python/pyproject.toml) for Python, `dart format` for Dart.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Go is tabs, and gofmt is not negotiable about it.
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[go.mod]
+indent_style = tab
+
+# PEP 8, as enforced by ruff.
+[*.py]
+indent_size = 4
+
+# dart format's default measure.
+[*.dart]
+indent_size = 2
+max_line_length = 80
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+# Trailing double-space is a hard line break in Markdown. The docs here are
+# hand-wrapped prose and a few of them rely on it.
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_size = 2

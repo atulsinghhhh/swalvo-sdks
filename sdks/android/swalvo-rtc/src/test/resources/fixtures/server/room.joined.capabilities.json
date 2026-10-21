@@ -1,0 +1,17 @@
+{
+  "type": "room.joined",
+  "roomId": "room_123",
+  "participants": [
+    {
+      "id": "bob",
+      "tracks": [],
+      "metadata": "bob's metadata",
+      "attributes": {
+        "team": "blue"
+      }
+    }
+  ],
+  "capabilities": [
+    "data.v2"
+  ]
+}

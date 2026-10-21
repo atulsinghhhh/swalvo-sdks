@@ -1,0 +1,154 @@
+name: npm auth check
+
+# Manual only. Publishes nothing.
+#
+# This exists because the first release run after a token change is the
+# worst possible place to discover that NPM_TOKEN is read-only, expired, or
+# refused by the account's 2FA setting. `release.yml` publishes eight
+# interdependent packages in dependency order; a run that dies halfway
+# leaves a partial release on a registry where unpublish is restricted to
+# 72 hours. Finding out here costs nothing.
+#
+# It deliberately reproduces release.yml's auth path exactly rather than
+# testing the token some other way: same pnpm/action-setup, same
+# actions/setup-node with `registry-url`, same NODE_AUTH_TOKEN. That
+# `registry-url` is the load-bearing part — it writes the .npmrc holding
+# `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}`, and `pnpm publish`
+# reads that file. pnpm never sees NPM_TOKEN itself, so a token that works
+# in a bare `npm whoami` elsewhere proves less than this does.
+#
+#   gh workflow run npm-auth-check.yml
+on:
+  workflow_dispatch:
+
+# Read-only, and deliberately narrower than release.yml: no `contents:
+# write`, no `id-token: write`, no `packages: write`. This job could not
+# publish even if a step tried to.
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  # The scope whose packages release.yml publishes. Kept here so the
+  # assertions below have one place to change.
+  NPM_SCOPE: "@swalvo"
+
+jobs:
+  whoami:
+    name: Can NPM_TOKEN publish?
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          # Same as release.yml. This is what creates the authenticated
+          # .npmrc; without it every command below runs anonymously.
+          registry-url: "https://registry.npmjs.org"
+
+      # --- the hard gate ---------------------------------------------------
+      # A failure here means release.yml would also fail, before publishing
+      # anything.
+      - name: Identity
+        id: identity
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN is not set on this repository. release.yml would publish anonymously and fail."
+            exit 1
+          fi
+
+          # Never `set -x` in this job: the .npmrc written by setup-node
+          # contains the token, and tracing would put it in the log.
+          if ! who="$(npm whoami 2>npm-whoami.err)"; then
+            echo "::error::NPM_TOKEN did not authenticate. npm said:"
+            sed 's/^/    /' npm-whoami.err >&2
+            echo "::notice::Usual causes: the token was revoked or expired, or it was pasted with surrounding whitespace."
+            exit 1
+          fi
+
+          echo "authenticated as: ${who}"
+          echo "who=${who}" >> "$GITHUB_OUTPUT"
+
+      - name: Is that account a maintainer of ${{ env.NPM_SCOPE }}?
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          WHO: ${{ steps.identity.outputs.who }}
+        run: |
+          set -euo pipefail
+
+          # Read against a package that is definitely published, so this
+          # asserts the real ownership the publish will be checked against.
+          owners="$(npm owner ls "${NPM_SCOPE}/rtc" | awk '{print $1}')"
+          echo "maintainers of ${NPM_SCOPE}/rtc:"
+          echo "${owners}" | sed 's/^/    /'
+
+          if ! echo "${owners}" | grep -qx "${WHO}"; then
+            echo "::error::${WHO} is not a maintainer of ${NPM_SCOPE}/rtc. The token authenticates, but publishing would be refused."
+            exit 1
+          fi
+          echo "ok: ${WHO} can publish to ${NPM_SCOPE}"
+
+      # --- advisory --------------------------------------------------------
+      # Granular access tokens are scoped narrowly and may be refused by
+      # these endpoints even when they can publish perfectly well, so
+      # neither step fails the run. They are here because both answer a
+      # question that otherwise only surfaces mid-release.
+      - name: Write access per package (advisory)
+        continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          npm access list packages "${NPM_SCOPE}" --json > access.json
+          node -e '
+            const a = require("./access.json");
+            const rows = Object.entries(a);
+            let readonly = 0;
+            for (const [pkg, perm] of rows) {
+              console.log(`  ${perm === "read-write" ? "rw" : "ro"}  ${pkg}`);
+              if (perm !== "read-write") readonly++;
+            }
+            console.log(`\n${rows.length} package(s), ${readonly} without write access`);
+            if (readonly > 0) {
+              console.log("::warning::Some packages are read-only for this token. A publish covering them would fail with 403.");
+            }
+          '
+
+      - name: Two-factor mode (advisory)
+        continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          npm profile get --json > profile.json
+          node -e '
+            const p = require("./profile.json");
+            const tfa = p.tfa ?? "unknown";
+            console.log("two-factor:", JSON.stringify(tfa));
+            const mode = typeof tfa === "object" && tfa !== null ? tfa.mode : tfa;
+            if (mode === "auth-and-writes") {
+              console.log("::warning::2FA is set to auth-and-writes. Unattended publishing fails with EOTP regardless of the token. Set it to auth-only.");
+            }
+          '
+
+      - name: Summary
+        if: always()
+        env:
+          WHO: ${{ steps.identity.outputs.who }}
+        run: |
+          {
+            echo "### npm auth check"
+            echo
+            echo "- authenticated as: \`${WHO:-<failed>}\`"
+            echo "- scope: \`${NPM_SCOPE}\`"
+            echo "- published nothing"
+            echo
+            echo "The advisory steps do not fail this run; read their logs before merging a version PR."
+          } >> "$GITHUB_STEP_SUMMARY"

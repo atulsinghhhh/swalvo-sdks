@@ -1,0 +1,14 @@
+{
+  "name": "swalvo-example-flutter-rtc-chat-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Token-minting backend for the Flutter example. The Flutter app itself is in lib/.",
+  "type": "module",
+  "scripts": {
+    "server": "node server.mjs"
+  },
+  "dependencies": {
+    "@swalvo/server": "^0.1.0",
+    "express": "^4.19.2"
+  }
+}

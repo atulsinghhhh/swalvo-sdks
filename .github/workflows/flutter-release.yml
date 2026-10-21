@@ -1,0 +1,148 @@
+name: Release Flutter SDK
+
+# Two ways to publish an sdks/flutter/* package to pub.dev, both delegating
+# the actual verify+publish steps to flutter-publish-package.yml:
+#
+# 1. Automatic, on push to main: if a package's pubspec.yaml `version` no
+#    longer matches what's live on pub.dev, that package publishes. The
+#    human gate is the version bump itself — bumping swalvo_rtc's version
+#    and merging it to main IS the release approval, same philosophy as
+#    the npm changesets flow in release.yml ("a deliberate human step",
+#    not a push that publishes by itself). A push that doesn't change any
+#    version publishes nothing.
+#
+# 2. Manual, via workflow_dispatch: pick a package from the dropdown,
+#    type PUBLISH, and it publishes regardless of whether its pubspec
+#    version changed — useful for the very first release of a package, or
+#    a deliberate republish attempt.
+#
+# Order is enforced either way: swalvo_live depends on swalvo_rtc and
+# swalvo_chat as hosted version constraints (see
+# sdks/flutter/swalvo_live/pubspec.yaml), so its job waits for theirs
+# (`needs:`), regardless of trigger.
+#
+# Uses pub.dev's GitHub Actions OIDC automated publishing — no token
+# stored in this repo. One-time setup per package, once it exists on
+# pub.dev: pub.dev -> package -> Admin -> Automated publishing ->
+# GitHub Actions, repository `atulsinghhhh/swalvo-sdks`, workflow filename
+# `flutter-publish-package.yml` (the reusable workflow that actually runs
+# `flutter pub publish`, not this file).
+# https://dart.dev/tools/pub/automated-publishing
+#
+# The swalvo_* names are new on pub.dev (the packages were published as
+# raven_* before the rename), so the first release of each must be a
+# manual `flutter pub publish` by an uploader — automated publishing can
+# only be enabled once the package exists.
+
+# Paused until the first deploy: this workflow only runs when started by
+# hand (Actions > Flutter release > Run workflow). To turn automatic runs back on,
+# restore the push/pull_request triggers from git history (commit "ci: pause
+# deploy and publish workflows").
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to publish (manual run — publishes even without a version change)"
+        required: true
+        type: choice
+        options:
+          - swalvo_rtc
+          - swalvo_chat
+          - swalvo_live
+      confirm:
+        description: "Type PUBLISH to confirm uploading to pub.dev"
+        required: true
+
+concurrency:
+  group: flutter-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  # A reusable workflow call is capped by what the *calling* job is
+  # itself allowed, not just what the reusable workflow's own job
+  # declares — flutter-publish-package.yml's publish job requests
+  # id-token: write for pub.dev's OIDC trusted publishing, and every
+  # push/dispatch of this workflow failed at startup ("requesting
+  # id-token: write, but is only allowed id-token: none") until this
+  # was granted here too. python-release.yml never hit this because it
+  # does the OIDC-requiring work inline in its own job rather than via
+  # a nested `uses:` call.
+  id-token: write
+
+jobs:
+  # Push trigger only: for each package, compares pubspec.yaml's version
+  # against what pub.dev currently serves. Manual dispatch skips this
+  # entirely — the chosen package always publishes on that path.
+  detect:
+    name: Detect version changes
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      rtc: ${{ steps.diff.outputs.swalvo_rtc }}
+      chat: ${{ steps.diff.outputs.swalvo_chat }}
+      live: ${{ steps.diff.outputs.swalvo_live }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compare local versions against pub.dev
+        id: diff
+        run: |
+          set -euo pipefail
+          for pkg in swalvo_rtc swalvo_chat swalvo_live; do
+            local_version=$(grep '^version:' "sdks/flutter/$pkg/pubspec.yaml" | head -1 | awk '{print $2}')
+            published_version=$(curl -fsS "https://pub.dev/api/packages/$pkg" 2>/dev/null | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).latest.version" 2>/dev/null || echo "")
+            echo "$pkg: local=$local_version published=${published_version:-<not published>}"
+            if [ "$local_version" != "$published_version" ]; then
+              echo "$pkg=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$pkg=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
+  publish-rtc:
+    name: swalvo_rtc
+    needs: detect
+    # always(): detect's own `if: github.event_name == 'push'` skips it
+    # outright on a workflow_dispatch run, and a job depending on a
+    # skipped job is auto-skipped by default regardless of its own
+    # `if:` — without this, the dispatch path below could never fire.
+    if: |
+      always() &&
+      (
+        (github.event_name == 'push' && needs.detect.outputs.rtc == 'true') ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.package == 'swalvo_rtc' && github.event.inputs.confirm == 'PUBLISH')
+      )
+    uses: ./.github/workflows/flutter-publish-package.yml
+    with:
+      package: swalvo_rtc
+
+  publish-chat:
+    name: swalvo_chat
+    needs: detect
+    # Same always() as publish-rtc — see its comment.
+    if: |
+      always() &&
+      (
+        (github.event_name == 'push' && needs.detect.outputs.chat == 'true') ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.package == 'swalvo_chat' && github.event.inputs.confirm == 'PUBLISH')
+      )
+    uses: ./.github/workflows/flutter-publish-package.yml
+    with:
+      package: swalvo_chat
+
+  publish-live:
+    name: swalvo_live
+    needs: [detect, publish-rtc, publish-chat]
+    # always() so this still runs when publish-rtc/publish-chat were
+    # skipped (their own package didn't change) rather than counted as
+    # failed — only an actual failure in either should block swalvo_live.
+    if: |
+      always() &&
+      needs.publish-rtc.result != 'failure' && needs.publish-chat.result != 'failure' &&
+      (
+        (github.event_name == 'push' && needs.detect.outputs.live == 'true') ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.package == 'swalvo_live' && github.event.inputs.confirm == 'PUBLISH')
+      )
+    uses: ./.github/workflows/flutter-publish-package.yml
+    with:
+      package: swalvo_live

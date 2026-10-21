@@ -1,0 +1,60 @@
+name: swalvo_live
+description: >-
+  Swalvo Live Streaming for Flutter — join a stream as a host or a viewer,
+  with the room and the live chat that come with it. Composes swalvo_rtc and
+  swalvo_chat; adds no media or messaging stack of its own.
+version: 0.2.1
+homepage: https://github.com/atulsinghhhh/swalvo-sdks
+repository: https://github.com/atulsinghhhh/swalvo-sdks
+issue_tracker: https://github.com/atulsinghhhh/swalvo-sdks/issues
+documentation: https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/flutter.md
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # A stream is one RTC room plus one chat conversation — the same reuse
+  # discipline the backend itself follows. This package owns lifecycle and
+  # role bookkeeping on top of both; it never duplicates what swalvo_rtc or
+  # swalvo_chat already does correctly.
+  # Declared as hosted version constraints, not paths: pub refuses to
+  # publish a package that depends on a path, and swalvo_live is meant to be
+  # published. The dependency_overrides below point both at the sibling
+  # packages in this repo, so local development and CI still resolve
+  # against the working tree — overrides are ignored on publish.
+  # Lower-bounded at 0.2.0, not ^0.1.x, and that bound is load-bearing
+  # rather than housekeeping. Every release before 0.2.0 (published under
+  # the former name raven_rtc) resolves a
+  # tile's track from the participant snapshot it was handed, and
+  # SwalvoRoom notifies its listeners synchronously — before the roster
+  # that snapshot came from has been replaced. A viewer's tile for the
+  # host therefore resolved against the pre-publish snapshot, found no
+  # track, and stayed on its placeholder for the whole stream while the
+  # connection underneath decoded real video the entire time. Since
+  # `^0.1.8` means `>=0.1.8 <0.2.0` to pub, leaving it that way would
+  # have pinned every swalvo_live application to versions that cannot
+  # show a viewer the stream they joined.
+  swalvo_rtc: '>=0.2.0 <0.4.0'
+  swalvo_chat: ^0.2.0
+  meta: ^1.15.0
+  # HLS playback for BROADCAST viewers (SwalvoLivePlayer). Flutter's
+  # first-party player: AVPlayer on iOS, ExoPlayer on Android.
+  video_player: ^2.9.0
+
+dependency_overrides:
+  swalvo_rtc:
+    path: ../swalvo_rtc
+  swalvo_chat:
+    path: ../swalvo_chat
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+# Not a plugin, and it never will be: swalvo_live has no native code of its
+# own. Camera/microphone come from swalvo_rtc, the socket comes from
+# swalvo_chat.

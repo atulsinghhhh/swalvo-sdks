@@ -1,0 +1,5 @@
+{
+  "type": "error",
+  "code": "NEGOTIATION_GLARE",
+  "message": "An offer is already in flight"
+}

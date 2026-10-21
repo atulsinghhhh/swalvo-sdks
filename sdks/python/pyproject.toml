@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swalvo"
+version = "0.2.0"
+description = "Official Python server SDK for Swalvo — mint short-lived RTC tokens, manage rooms, and read connection/error diagnostics from your own backend. Never for use in a browser."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28.1,<1.0",
+]
+keywords = ["webrtc", "rtc", "chat", "live-streaming", "sdk", "swalvo"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Communications :: Chat",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=0.24",
+    "mypy>=2.3.1",
+    "ruff>=0.16.6",
+    "build>=1.6.0",
+]
+
+[project.urls]
+Homepage = "https://swalvo.com"
+Documentation = "https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/server/python.md"
+Repository = "https://github.com/atulsinghhhh/swalvo-sdks"
+Issues = "https://github.com/atulsinghhhh/swalvo-sdks/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# ``swalvo`` is the SDK; ``raven`` is a thin deprecated shim that re-exports it
+# so code written against the pre-rename package keeps importing.
+include = ["swalvo*", "raven*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+
+# Ruff does both jobs here — formatter and linter — so the SDK needs one
+# dev tool rather than black + flake8 + isort.
+#
+# line-length is 120 to match what this code already does (only 11 of its
+# lines exceed it) and to agree with Prettier's printWidth for the
+# TypeScript side, so the repo reads at one measure. Dropping to ruff's
+# default 88 would rewrite most of the SDK to no benefit.
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes — undefined names, unused imports
+    "I",   # isort — import ordering
+    "UP",  # pyupgrade — syntax modernisation within target-version
+    "B",   # bugbear — mutable defaults, shadowed loop vars, ...
+    "SIM", # flake8-simplify
+    "RUF", # ruff's own checks
+]
+ignore = [
+    # Long lines are left to the formatter. Flagging them as lint errors as
+    # well means a URL or a sentence in a docstring fails CI for something
+    # `ruff format` has already decided it cannot improve.
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests exercise error paths on purpose and re-bind fixtures freely.
+"tests/*" = ["B011"]
+# The public surface is deliberately re-exported here; that is what an
+# __init__ is for, and __all__ already states the intent explicitly.
+"src/swalvo/__init__.py" = ["F401"]
+"src/raven/__init__.py" = ["F401"]

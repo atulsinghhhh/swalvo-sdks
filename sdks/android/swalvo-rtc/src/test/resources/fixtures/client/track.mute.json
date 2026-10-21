@@ -1,0 +1,5 @@
+{
+  "type": "track.mute",
+  "trackId": "abc-123",
+  "muted": true
+}

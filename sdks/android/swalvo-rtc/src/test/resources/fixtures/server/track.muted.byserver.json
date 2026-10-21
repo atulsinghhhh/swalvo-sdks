@@ -1,0 +1,6 @@
+{
+  "type": "track.muted",
+  "participantId": "me",
+  "trackId": "abc",
+  "byServer": true
+}

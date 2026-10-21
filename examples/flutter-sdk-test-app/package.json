@@ -1,0 +1,14 @@
+{
+  "name": "swalvo-example-flutter-sdk-test-app-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Dev-helper token-minting backend for the Flutter SDK integration test app. Holds SWALVO_API_KEY server-side; the Flutter app never sees it.",
+  "type": "module",
+  "scripts": {
+    "server": "node server.mjs"
+  },
+  "dependencies": {
+    "@swalvo/server": "^0.1.0",
+    "express": "^4.19.2"
+  }
+}

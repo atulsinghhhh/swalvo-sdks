@@ -1,0 +1,44 @@
+{
+  "name": "swalvo/swalvo-php",
+  "description": "Swalvo's PHP server SDK: mint short-lived RTC, chat and live-stream credentials, manage rooms and streams, verify webhooks. For your backend only.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "swalvo",
+    "webrtc",
+    "rtc",
+    "chat",
+    "live-streaming",
+    "sdk",
+    "webhooks"
+  ],
+  "homepage": "https://github.com/atulsinghhhh/swalvo-sdks/tree/main/sdks/php",
+  "require": {
+    "php": ">=8.1",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Swalvo\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Swalvo\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "8.1.0"
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "minimum-stability": "stable"
+}

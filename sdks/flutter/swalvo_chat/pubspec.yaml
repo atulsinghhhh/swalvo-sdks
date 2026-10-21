@@ -1,0 +1,35 @@
+name: swalvo_chat
+description: >-
+  Swalvo Chat for Flutter — real-time messaging with durable history, presence,
+  typing indicators, reactions, read receipts and threads. Connect, send, and
+  listen without writing WebSocket code.
+version: 0.2.0
+homepage: https://github.com/atulsinghhhh/swalvo-sdks
+repository: https://github.com/atulsinghhhh/swalvo-sdks
+issue_tracker: https://github.com/atulsinghhhh/swalvo-sdks/issues
+documentation: https://github.com/atulsinghhhh/swalvo-sdks/blob/main/docs/sdk/flutter.md
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # WebSocket + HTTP only. No WebRTC here: chat is a separate plane from
+  # RTC, and an app that only wants messaging shouldn't pull in a media
+  # stack (see docs/chat/overview.md).
+  web_socket_channel: ^3.0.1
+  http: ^1.2.2
+  meta: ^1.15.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  # Test-only. web_socket_channel is built on stream_channel, so the fake
+  # socket the client tests drive has to name StreamChannelMixin itself.
+  stream_channel: ^2.1.2
+
+# Not a plugin. Pure Dart over the platform's own networking — there is no
+# native code to register.

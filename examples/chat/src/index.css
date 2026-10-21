@@ -1,0 +1,251 @@
+/* Deliberately plain. This example is about the Swalvo Chat API, not about
+   demonstrating a design system — every line here exists to make the
+   real-time behaviour legible. */
+:root {
+  color-scheme: light dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  --border: color-mix(in srgb, currentColor 15%, transparent);
+  --muted: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+
+.centered {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 26rem;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.presence {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.chip-online {
+  border-color: seagreen;
+}
+.chip-away {
+  border-color: goldenrod;
+}
+.chip-offline {
+  opacity: 0.5;
+}
+
+.state {
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+.state-connected {
+  color: seagreen;
+}
+.state-reconnecting {
+  color: goldenrod;
+}
+.state-failed,
+.state-disconnected {
+  color: crimson;
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  overflow-y: auto;
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.message {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.message.mine {
+  border-color: color-mix(in srgb, steelblue 50%, var(--border));
+}
+.message.system {
+  border: none;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.message.deleted {
+  border-style: dashed;
+}
+.message p {
+  margin: 0.25rem 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-size: 0.8rem;
+}
+.meta time {
+  color: var(--muted);
+}
+
+.reply-ref,
+.read-by {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.reactions {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+.reaction {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.message:hover .actions,
+.message:focus-within .actions {
+  opacity: 1;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 1rem 1rem;
+}
+footer form {
+  display: flex;
+  gap: 0.5rem;
+}
+footer input {
+  flex: 1;
+}
+
+.typing {
+  font-size: 0.75rem;
+  color: var(--muted);
+  min-height: 1.2em;
+}
+.typing.placeholder {
+  visibility: hidden;
+}
+
+.reply-banner {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.edit-form {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.edit-form input {
+  flex: 1;
+}
+
+input,
+button {
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+}
+button[type='submit'] {
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.muted {
+  color: var(--muted);
+}
+.error {
+  color: crimson;
+  font-size: 0.85rem;
+}
+.banner {
+  margin: 0;
+  padding: 0.5rem 1rem;
+}
+.load-more {
+  text-align: center;
+}

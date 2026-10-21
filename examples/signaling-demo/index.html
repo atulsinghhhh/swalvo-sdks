@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Swalvo Signaling Demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      p.hint {
+        color: #666;
+        font-size: 0.9rem;
+      }
+      fieldset {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+      input,
+      select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.4rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+      button {
+        margin-top: 0.6rem;
+        margin-right: 0.4rem;
+        padding: 0.4rem 0.8rem;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+      #status {
+        font-weight: 600;
+      }
+      #status.connected {
+        color: #16794a;
+      }
+      #status.disconnected {
+        color: #a11;
+      }
+      #participants li {
+        font-family: monospace;
+      }
+      #log {
+        height: 260px;
+        overflow-y: auto;
+        background: #111;
+        color: #ddd;
+        font-family: monospace;
+        font-size: 0.8rem;
+        padding: 0.6rem;
+        border-radius: 6px;
+      }
+      #log .in {
+        color: #7fdcff;
+      }
+      #log .out {
+        color: #9fef9f;
+      }
+      #log .err {
+        color: #ff8080;
+      }
+      .row {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .row > div {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Swalvo Signaling Demo (Phase 3)</h1>
+    <p class="hint">
+      A minimal manual test page for the WebSocket signaling layer — no media, no build step. Open this same file in two
+      browser tabs to act as two participants in the same room. Get RTC tokens via
+      <code>POST /v1/rooms/:roomId/rtc-tokens</code> against <code>https://api.swalvo.com</code> with your project API
+      key (see <code>docs/sdk.md#authentication</code>).
+    </p>
+
+    <fieldset>
+      <legend>Connection</legend>
+      <label>Signaling URL</label>
+      <input id="wsUrl" value="wss://api.swalvo.com/v1/rtc" />
+      <p class="hint">
+        Hosted Swalvo Cloud default shown. If your token response's <code>endpoint</code> field differs, paste that
+        value here instead — it's the authoritative signaling URL for your project/region.
+      </p>
+      <label>RTC token</label>
+      <input id="token" placeholder="paste an RTC token from POST /v1/rooms/:roomId/rtc-tokens" />
+      <button id="connectBtn">Connect</button>
+      <button id="disconnectBtn" disabled>Disconnect</button>
+      <div>Status: <span id="status" class="disconnected">disconnected</span></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Room</legend>
+      <button id="joinBtn" disabled>room.join</button>
+      <button id="leaveBtn" disabled>room.leave</button>
+      <button id="pingBtn" disabled>ping</button>
+      <div>Participants in room:</div>
+      <ul id="participants"></ul>
+    </fieldset>
+
+    <fieldset>
+      <legend>SDP / ICE (manual — paste any placeholder text, no real WebRTC is used here)</legend>
+      <div class="row">
+        <div>
+          <label>Target participant ID</label>
+          <input id="targetId" placeholder="e.g. bob" />
+        </div>
+      </div>
+      <label>SDP text</label>
+      <input id="sdpText" value="v=0 (placeholder sdp)" />
+      <button id="offerBtn" disabled>Send sdp.offer</button>
+      <button id="answerBtn" disabled>Send sdp.answer</button>
+      <label>ICE candidate JSON</label>
+      <input id="iceText" value='{"candidate":"candidate:1 1 UDP 1 127.0.0.1 5000 typ host"}' />
+      <button id="iceBtn" disabled>Send ice.candidate</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Message log</legend>
+      <div id="log"></div>
+    </fieldset>
+
+    <script>
+      let ws = null;
+      const statusEl = document.getElementById('status');
+      const logEl = document.getElementById('log');
+      const participantsEl = document.getElementById('participants');
+      const participants = new Set();
+
+      const connectBtn = document.getElementById('connectBtn');
+      const disconnectBtn = document.getElementById('disconnectBtn');
+      const actionButtons = ['joinBtn', 'leaveBtn', 'pingBtn', 'offerBtn', 'answerBtn', 'iceBtn'].map((id) =>
+        document.getElementById(id),
+      );
+
+      function setConnected(connected) {
+        statusEl.textContent = connected ? 'connected' : 'disconnected';
+        statusEl.className = connected ? 'connected' : 'disconnected';
+        connectBtn.disabled = connected;
+        disconnectBtn.disabled = !connected;
+        actionButtons.forEach((btn) => (btn.disabled = !connected));
+      }
+
+      function log(direction, message) {
+        const line = document.createElement('div');
+        line.className = direction;
+        const prefix = { in: '<< ', out: '>> ', err: '!! ' }[direction];
+        line.textContent = prefix + (typeof message === 'string' ? message : JSON.stringify(message));
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      function renderParticipants() {
+        participantsEl.innerHTML = '';
+        for (const id of participants) {
+          const li = document.createElement('li');
+          li.textContent = id;
+          participantsEl.appendChild(li);
+        }
+      }
+
+      function send(msg) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        log('out', msg);
+        ws.send(JSON.stringify(msg));
+      }
+
+      document.getElementById('connectBtn').onclick = () => {
+        const url = document.getElementById('wsUrl').value;
+        const token = document.getElementById('token').value.trim();
+        if (!token) {
+          alert('Paste an RTC token first.');
+          return;
+        }
+
+        ws = new WebSocket(`${url}?token=${encodeURIComponent(token)}`);
+        ws.onopen = () => {
+          setConnected(true);
+          log('in', '[connection open]');
+        };
+        ws.onclose = (ev) => {
+          setConnected(false);
+          log('in', `[closed: code=${ev.code} reason=${ev.reason}]`);
+          participants.clear();
+          renderParticipants();
+        };
+        ws.onerror = () => log('err', '[socket error]');
+        ws.onmessage = (ev) => {
+          const msg = JSON.parse(ev.data);
+          log('in', msg);
+          if (msg.type === 'room.joined') {
+            participants.clear();
+            msg.participants.forEach((p) => participants.add(p.id));
+            renderParticipants();
+          } else if (msg.type === 'participant.joined') {
+            participants.add(msg.participant.id);
+            renderParticipants();
+          } else if (msg.type === 'participant.left') {
+            participants.delete(msg.participant.id);
+            renderParticipants();
+          } else if (msg.type === 'room.left') {
+            participants.clear();
+            renderParticipants();
+          }
+        };
+      };
+
+      document.getElementById('disconnectBtn').onclick = () => ws && ws.close();
+      document.getElementById('joinBtn').onclick = () => send({ type: 'room.join' });
+      document.getElementById('leaveBtn').onclick = () => send({ type: 'room.leave' });
+      document.getElementById('pingBtn').onclick = () => send({ type: 'ping' });
+
+      document.getElementById('offerBtn').onclick = () =>
+        send({
+          type: 'sdp.offer',
+          targetParticipantId: document.getElementById('targetId').value,
+          sdp: document.getElementById('sdpText').value,
+        });
+      document.getElementById('answerBtn').onclick = () =>
+        send({
+          type: 'sdp.answer',
+          targetParticipantId: document.getElementById('targetId').value,
+          sdp: document.getElementById('sdpText').value,
+        });
+      document.getElementById('iceBtn').onclick = () => {
+        let candidate;
+        try {
+          candidate = JSON.parse(document.getElementById('iceText').value);
+        } catch {
+          alert('ICE candidate must be valid JSON');
+          return;
+        }
+        send({ type: 'ice.candidate', targetParticipantId: document.getElementById('targetId').value, candidate });
+      };
+    </script>
+  </body>
+</html>

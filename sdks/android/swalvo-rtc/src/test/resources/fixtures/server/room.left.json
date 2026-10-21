@@ -1,0 +1,5 @@
+{
+  "type": "room.left",
+  "roomId": "room_123",
+  "reason": "REMOVED"
+}

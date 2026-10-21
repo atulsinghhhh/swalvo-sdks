@@ -1,0 +1,60 @@
+[
+  {
+    "type": "room.joined",
+    "roomId": "room_123",
+    "rtcServer": "sfu-asia-02",
+    "region": "asia-south",
+    "participants": [
+      {
+        "id": "bob",
+        "tracks": [
+          { "trackId": "bob-cam", "kind": "video", "source": "camera",
+            "muted": false, "simulcast": true, "layers": ["low", "medium", "high"] }
+        ]
+      }
+    ]
+  },
+  { "type": "room.joined", "roomId": "room_123", "participants": [], "resumeToken": "rt-1", "resumed": true, "e2ee": true, "clientRegion": "ap-south" },
+  { "type": "room.resume_token", "resumeToken": "<opaque string>" },
+  { "type": "room.left", "roomId": "room_123", "reason": "REMOVED" },
+  { "type": "room.left", "roomId": "room_123" },
+  { "type": "token.expiring", "expiresAt": "2026-10-02T12:00:00.000Z" },
+  { "type": "token.refreshed", "expiresAt": "2026-10-02T12:10:00.000Z" },
+  {
+    "type": "participant.permissions_updated",
+    "permissions": {
+      "subscribe": true, "publish": false,
+      "publishAudio": false, "publishVideo": false, "publishData": false
+    }
+  },
+  { "type": "speakers.changed", "speakers": [ { "participantId": "alice", "level": 0.82 } ] },
+  { "type": "quality.changed", "updates": [ { "participantId": "alice", "quality": "good" } ] },
+  { "type": "subscription.state", "publisherId": "bob", "trackId": "bob-cam",
+    "state": "active", "layer": "medium" },
+  { "type": "publisher.layers", "trackId": "alice-cam",
+    "layers": [ { "rid": "q", "active": true }, { "rid": "h", "active": false }, { "rid": "f", "active": false } ] },
+  { "type": "sdp.offer", "sdp": "v=0\r\n..." },
+  { "type": "sdp.answer", "sdp": "v=0\r\n..." },
+  {
+    "type": "ice.candidate",
+    "candidate": "candidate:1 1 udp 2130706431 10.0.0.1 54321 typ host",
+    "sdpMid": "0",
+    "sdpMLineIndex": 0,
+    "usernameFragment": "abc123"
+  },
+  { "type": "participant.joined", "participant": { "id": "carol", "tracks": [] } },
+  { "type": "participant.left", "participant": { "id": "carol", "tracks": [] } },
+  {
+    "type": "track.published",
+    "participantId": "bob",
+    "track": { "trackId": "bob-screen", "kind": "video", "source": "screenShare",
+               "muted": false, "simulcast": false }
+  },
+  { "type": "track.unpublished", "participantId": "bob", "trackId": "bob-screen" },
+  { "type": "track.muted", "participantId": "bob", "trackId": "bob-cam" },
+  { "type": "track.muted", "participantId": "<you>", "trackId": "abc", "byServer": true },
+  { "type": "track.unmuted", "participantId": "bob", "trackId": "bob-cam" },
+  { "type": "connection.state", "iceState": "connected", "peerState": "connected" },
+  { "type": "error", "code": "NEGOTIATION_GLARE", "message": "..." },
+  { "type": "pong" }
+]
