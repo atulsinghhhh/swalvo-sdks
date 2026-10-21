@@ -27,15 +27,15 @@ contains only the SDKs and examples.
 | Platform | Package | Path |
 |---|---|---|
 | JavaScript / TypeScript | the `@swalvo/*` packages above | `packages/` |
-| Python (server) | `swalvo` | `sdks/python` |
 | Flutter | `swalvo_rtc`, `swalvo_chat`, `swalvo_live` | `sdks/flutter` |
 
 Runnable samples are in `examples/`.
 
 ## Coming soon
 
-These SDKs are planned and are not part of this repository yet:
+These SDKs are not published yet:
 
+- Python (server SDK; the code is in `sdks/python`, publishing to PyPI is pending)
 - Go
 - Java
 - PHP

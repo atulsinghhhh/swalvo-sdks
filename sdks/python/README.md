@@ -1,5 +1,9 @@
 # swalvo
 
+> **Coming soon.** This SDK is not published to PyPI yet, so `pip install swalvo`
+> will not find it today. Until it ships, use the `@swalvo/server` package for
+> Node.js, or call the HTTP API directly. See <https://docs.livqeno.com>.
+
 Livqeno's official **Python server SDK** — mint short-lived RTC and chat
 tokens, manage rooms and live streams, and read connection/error
 diagnostics from your own backend.

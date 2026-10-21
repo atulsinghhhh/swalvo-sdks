@@ -20,7 +20,7 @@ media, dashboard). Report platform issues the same way and we will route them.
 ## Using the SDKs safely
 
 - Never put an API key in browser, mobile or other client code. Mint a
-  short-lived token on your server with `@swalvo/server` (or the
-  Python SDK) and hand only the token to the client.
+  short-lived token on your server with `@swalvo/server` (a Python SDK is
+  coming soon) and hand only the token to the client.
 - Keep tokens short-lived and scoped to one room or conversation.
 - Pin SDK versions and review changelogs when upgrading.
